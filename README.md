@@ -51,7 +51,7 @@ make test-unit
 ![system design](/docs/system-design.png)
 ![layers](/docs/layers.png)
 
-### Folder/File struct
+### Folder/File structure
 
 - `/cmd`: Main applications for this project.
 - `/internal`: Private application and library code.
@@ -74,7 +74,7 @@ Note: _inspired by https://github.com/golang-standards/project-layout_
 
 ## API Docs
 
-In this section is described the REST API's endpoints (URL, request, response, etc).
+This section is described the REST API's endpoints (URL, request, response, etc).
 
 <details>
 <summary>Create product</summary>
@@ -313,8 +313,6 @@ Status: 500
 ```
 
 </details>
-
-<br />
 
 ## Configuration
 
