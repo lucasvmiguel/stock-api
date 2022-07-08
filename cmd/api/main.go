@@ -30,6 +30,8 @@ type Config struct {
 
 func main() {
 	config := loadConfig()
+
+	// starts connection with database
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		config.DBHost,
 		config.DBUser,
@@ -44,6 +46,7 @@ func main() {
 
 	dbClient.AutoMigrate(&entity.Product{})
 
+	// creates product repository
 	productRepository, err := repository.NewRepository(dbClient)
 	if err != nil {
 		cmd.ExitWithError("failed to create product repository", err)

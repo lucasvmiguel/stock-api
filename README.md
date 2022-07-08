@@ -1,14 +1,16 @@
 # Stock API
 
+[![Go](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml)
+
 A Stock API is a REST API written in Golang where products (with stock) can be stored, retrieved, modified and deleted.
+
+Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
 ## Install
 
 ```
 git clone git@github.com:lucasvmiguel/stock-api.git
 ```
-
-_You must have Golang installed and configured to work with this API._
 
 ## Running the app
 
@@ -18,7 +20,7 @@ _You must have Golang installed and configured to work with this API._
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-1. Open a terminal and run the following command to start all persistence (database and queue) required:
+1. Open a terminal and run the following command to start the persistence (database) required:
 
 ```bash
 $ make persistence-up
@@ -32,7 +34,7 @@ $ make run
 
 ## Testing
 
-### How to run unit
+### Unit test
 
 ```
 make test-unit
@@ -47,17 +49,20 @@ make test-unit
 ### System Design
 
 ![system design](/docs/system-design.png)
+![layers](/docs/layers.png)
 
 ### Folder/File struct
 
 - `/cmd`: Main applications for this project.
-- `/internal`: Part of the code that is not shareable (nor relevant) to other projects.
+- `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
-- `/pkg`: Part of the code that can be shared and used by other projects.
+- `/pkg`: Library code that's ok to use by external applications (e.g., /pkg/mypubliclib).
 - `/.github`: CI/CD from Github.
-- `docker-compose.yml`: Used to spin up the persistence layer in development and testing.
+- `docker-compose.yml`: Used to spin up the persistence layer in development.
 - `.env`: configures project.
 - `Makefile`: Project's executable tasks.
+
+Note: _inspired by: https://github.com/golang-standards/project-layout_
 
 ### Stack
 
@@ -65,6 +70,7 @@ make test-unit
 - API/REST framework: `chi`
 - Database ORM: `Gorm`
 - Config reader: `godotenv`
+- Database: Postgres
 
 ## API Docs
 
@@ -72,7 +78,8 @@ In this section is described the REST API's endpoints (URL, request, response, e
 
 Note: _API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future._
 
-### Create product
+<details>
+<summary>Create product</summary>
 
 Endpoint that creates a product
 
@@ -122,7 +129,10 @@ Status: 400
 Status: 500
 ```
 
-### Get all products
+</details>
+
+<details>
+<summary>Get all products</summary>
 
 Endpoint to get all products
 
@@ -162,7 +172,10 @@ Body:
 Status: 500
 ```
 
-### Get product by id
+</details>
+
+<details>
+<summary>Get product by id</summary>
 
 Endpoint to get a product by id
 
@@ -206,7 +219,10 @@ Status: 404
 Status: 500
 ```
 
-### Update product by id
+</details>
+
+<details>
+<summary>Update product by id</summary>
 
 Endpoint that updates a product by id
 
@@ -262,7 +278,10 @@ Status: 404
 Status: 500
 ```
 
-### Delete product by id
+</details>
+
+<details>
+<summary>Delete product by id</summary>
 
 Endpoint to delete a product by id
 
@@ -295,6 +314,10 @@ Status: 404
 Status: 500
 ```
 
+</details>
+
+<br />
+
 ## Configuration
 
 A file called `.env` has all config used in the project.
@@ -302,7 +325,7 @@ A file called `.env` has all config used in the project.
 ## CI/CD
 
 The project uses Github CI to run tests, builds (and possibly deployments). You can see the badge below:
-[![Node.js CI](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-an-test.yml/badge.svg)](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml)
+[![Go](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml)
 
 Steps:
 
@@ -312,6 +335,11 @@ Steps:
 4. Log in to the Container registry (Github)
 5. Build and push Docker images
 
+## Important notes
+
+- command `make docker-run` in `development` will only work correctly if the container's network is configured right. (Check more info [here](https://docs.docker.com/config/containers/container-networking/))
+
 ## Roadmap
 
 - Remove `AutoMigrate` to implement some sort of manual migration system.
+- Implement E2E tests.

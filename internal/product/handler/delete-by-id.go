@@ -24,6 +24,7 @@ func (h *Handler) HandleDeleteByID(w http.ResponseWriter, req *http.Request) {
 
 	if product == nil {
 		respond.HTTPError(w, http.StatusNotFound, ErrNotFound)
+		return
 	}
 
 	respond.HTTP(respond.Response{

@@ -48,6 +48,11 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if product == nil {
+		respond.HTTPError(w, http.StatusNotFound, ErrNotFound)
+		return
+	}
+
 	respond.HTTP(respond.Response{
 		Body:       product,
 		StatusCode: http.StatusOK,
