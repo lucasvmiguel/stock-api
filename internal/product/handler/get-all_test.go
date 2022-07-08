@@ -11,7 +11,7 @@ import (
 )
 
 func TestHandleGetAll(t *testing.T) {
-	req, err := http.NewRequest("GET", "/products", nil)
+	req, err := http.NewRequest(http.MethodGet, "/products", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func TestHandleGetAll(t *testing.T) {
 }
 
 func TestHandleGetAllDBFailed(t *testing.T) {
-	req, err := http.NewRequest("GET", "/products", nil)
+	req, err := http.NewRequest(http.MethodGet, "/products", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -62,7 +62,7 @@ make test-unit
 - `.env`: configures project.
 - `Makefile`: Project's executable tasks.
 
-Note: _inspired by: https://github.com/golang-standards/project-layout_
+Note: _inspired by https://github.com/golang-standards/project-layout_
 
 ### Stack
 
@@ -75,8 +75,6 @@ Note: _inspired by: https://github.com/golang-standards/project-layout_
 ## API Docs
 
 In this section is described the REST API's endpoints (URL, request, response, etc).
-
-Note: _API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future._
 
 <details>
 <summary>Create product</summary>
@@ -182,7 +180,7 @@ Endpoint to get a product by id
 #### Request
 
 ```
-Endpoint: [GET] /products/1
+Endpoint: [GET] /products/{id}
 
 Headers:
   Content-Type: application/json
@@ -229,7 +227,7 @@ Endpoint that updates a product by id
 #### Request
 
 ```
-Endpoint: [POST] /products
+Endpoint: [PUT] /products/{id}
 
 Headers:
   Content-Type: application/json
@@ -288,7 +286,7 @@ Endpoint to delete a product by id
 #### Request
 
 ```
-Endpoint: [DELETE] /products/1
+Endpoint: [DELETE] /products/{id}
 
 Headers:
   Content-Type: application/json
@@ -325,6 +323,7 @@ A file called `.env` has all config used in the project.
 ## CI/CD
 
 The project uses Github CI to run tests, builds (and possibly deployments). You can see the badge below:
+<br />
 [![Go](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml)
 
 Steps:
@@ -343,3 +342,4 @@ Steps:
 
 - Remove `AutoMigrate` to implement some sort of manual migration system.
 - Implement E2E tests.
+- API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.

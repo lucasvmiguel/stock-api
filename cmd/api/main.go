@@ -70,10 +70,10 @@ func main() {
 	// product routes
 	router.Get("/products", productHandler.HandleGetAll)
 	router.Post("/products", productHandler.HandleCreate)
-	router.Get("/products/{id}", productHandler.HandleGetByID)
-	router.Delete("/products/{id}", productHandler.HandleDeleteByID)
-	router.Put("/products/{id}", productHandler.HandleUpdate)
-	router.Patch("/products/{id}", productHandler.HandleUpdate)
+	router.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
+	router.Delete(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleDeleteByID)
+	router.Put(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
+	router.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
 
 	log.Printf("listening on port %s", config.Port)
 	log.Println(http.ListenAndServe(fmt.Sprintf(":%s", config.Port), router))

@@ -13,7 +13,7 @@ import (
 )
 
 func TestHandleGetByID(t *testing.T) {
-	req, err := http.NewRequest("GET", "/products/1", nil)
+	req, err := http.NewRequest(http.MethodGet, "/products/1", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +44,7 @@ func TestHandleGetByID(t *testing.T) {
 }
 
 func TestHandleGetByIDNotFound(t *testing.T) {
-	req, err := http.NewRequest("GET", "/products/{id}", nil)
+	req, err := http.NewRequest(http.MethodGet, "/products/{id}", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,7 +67,7 @@ func TestHandleGetByIDNotFound(t *testing.T) {
 }
 
 func TestHandleGetByIDDBFailed(t *testing.T) {
-	req, err := http.NewRequest("GET", "/products/{id}", nil)
+	req, err := http.NewRequest(http.MethodGet, "/products/{id}", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

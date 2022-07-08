@@ -10,7 +10,7 @@ import (
 )
 
 func TestHandleCreate(t *testing.T) {
-	req, err := http.NewRequest("POST", "/products", bytes.NewReader(reqBody))
+	req, err := http.NewRequest(http.MethodPost, "/products", bytes.NewReader(reqBody))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 		"Name":          "",
 		"StockQuantity": -10,
 	})
-	req, err := http.NewRequest("POST", "/products", bytes.NewReader(reqBody))
+	req, err := http.NewRequest(http.MethodPost, "/products", bytes.NewReader(reqBody))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 }
 
 func TestHandleCreateDBFailed(t *testing.T) {
-	req, err := http.NewRequest("POST", "/products", bytes.NewReader(reqBody))
+	req, err := http.NewRequest(http.MethodPost, "/products", bytes.NewReader(reqBody))
 	if err != nil {
 		t.Fatal(err)
 	}

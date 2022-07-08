@@ -7,6 +7,8 @@ import (
 )
 
 var (
+	// field id is used as url param for different handlers (eg: get-by-id handler)
+	FieldID = "id"
 	// error when repository is nil
 	ErrNilRepository = errors.New("repository cannot be nil")
 	// error when json body is not valid

@@ -11,7 +11,7 @@ import (
 )
 
 func TestHandleDeleteByID(t *testing.T) {
-	req, err := http.NewRequest("DELETE", "/products/1", nil)
+	req, err := http.NewRequest(http.MethodDelete, "/products/1", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func TestHandleDeleteByID(t *testing.T) {
 }
 
 func TestHandleDeleteByIDNotFound(t *testing.T) {
-	req, err := http.NewRequest("DELETE", "/products/{id}", nil)
+	req, err := http.NewRequest(http.MethodDelete, "/products/{id}", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,7 +57,7 @@ func TestHandleDeleteByIDNotFound(t *testing.T) {
 }
 
 func TestHandleDeleteByIDDBFailed(t *testing.T) {
-	req, err := http.NewRequest("DELETE", "/products/{id}", nil)
+	req, err := http.NewRequest(http.MethodDelete, "/products/{id}", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

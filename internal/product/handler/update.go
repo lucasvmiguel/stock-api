@@ -2,14 +2,15 @@ package handler
 
 import (
 	"encoding/json"
+
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/pkg/errors"
 
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
+	"github.com/lucasvmiguel/stock-api/pkg/parser"
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
 
@@ -20,7 +21,7 @@ type updateRequestBody struct {
 
 // handles product update via http request
 func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
-	id, err := strconv.ParseUint(chi.URLParam(req, "id"), 10, 64)
+	id, err := parser.StringToUint(chi.URLParam(req, FieldID))
 	if err != nil {
 		respond.HTTPError(w, http.StatusBadRequest, err)
 		return
@@ -39,7 +40,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.repository.UpdateByID(uint(id), entity.Product{
+	product, err := h.repository.UpdateByID(id, entity.Product{
 		Name:          reqBody.Name,
 		StockQuantity: reqBody.StockQuantity,
 	})
