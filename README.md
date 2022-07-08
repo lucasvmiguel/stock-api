@@ -3,6 +3,8 @@ Notes:
 - migration needs to be implemented before going to production
 - REST API docs
 - githuv ci badge
+- describe DDD way
+- add comments to public functions
 
 - better database then sqlite (maybe using docker compose to spin up a postgres)
 

@@ -34,7 +34,6 @@ func (h *HandlerError) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		Body:       JSONBody{Message: message},
 		StatusCode: http.StatusBadRequest,
 		Writer:     w,
-		Err:        err,
 	})
 }
 

@@ -9,10 +9,10 @@ import (
 	"github.com/caarlos0/env/v6"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/internal/product/handler"
 	"github.com/lucasvmiguel/stock-api/internal/product/repository"
 	"github.com/lucasvmiguel/stock-api/pkg/cmd"
-	"github.com/lucasvmiguel/stock-api/pkg/ping"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -34,8 +34,13 @@ func main() {
 		cmd.ExitWithError("failed to connect database", err)
 	}
 
-	// // Migrate the schema
-	dbClient.AutoMigrate(&repository.Product{})
+	// Migrate the schema (TODO: fix schema?)
+	dbClient.AutoMigrate(&entity.Product{})
+
+	productRepository, err := repository.NewRepository(dbClient)
+	if err != nil {
+		cmd.ExitWithError("failed to create product repository", err)
+	}
 
 	router := chi.NewRouter()
 
@@ -44,19 +49,21 @@ func main() {
 	router.Use(middleware.RealIP)
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
-
-	// Set a timeout value on the request
 	router.Use(middleware.Timeout(60 * time.Second))
 
-	// ping handler
-	router.Handle("/ping", &ping.Handler{})
-
-	// post handler [POST]
-	postHandlerPost, err := handler.NewHandlerPost(dbClient)
+	// product handler
+	productHandler, err := handler.NewHandler(productRepository)
 	if err != nil {
-		cmd.ExitWithError("post handler post had an error", err)
+		cmd.ExitWithError("product handler had an error", err)
 	}
-	router.Post("/products", postHandlerPost.ServeHTTP)
+
+	// product routes
+	router.Get("/products", productHandler.HandleGetAll)
+	router.Post("/products", productHandler.HandleCreate)
+	router.Get("/products/{id}", productHandler.HandleGetByID)
+	router.Delete("/products/{id}", productHandler.HandleDeleteByID)
+	router.Put("/products/{id}", productHandler.HandleUpdate)
+	router.Patch("/products/{id}", productHandler.HandleUpdate)
 
 	log.Printf("listening on port %d", cfg.Port)
 	log.Println(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), router))

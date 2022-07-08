@@ -9,7 +9,6 @@ import (
 type Response struct {
 	Body       interface{}
 	StatusCode int
-	Err        error
 	Writer     http.ResponseWriter
 }
 
@@ -23,11 +22,6 @@ var (
 )
 
 func HTTP(resp Response) {
-	if resp.Err != nil {
-		HTTPError(resp.Writer, resp.StatusCode, resp.Err)
-		return
-	}
-
 	resp.Writer.Header().Set(contentTypeKey, contentTypeValue)
 	resp.Writer.WriteHeader(resp.StatusCode)
 	json.NewEncoder(resp.Writer).Encode(resp.Body)
