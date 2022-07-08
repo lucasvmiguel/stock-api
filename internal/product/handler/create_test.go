@@ -38,8 +38,8 @@ func TestHandleCreate(t *testing.T) {
 
 func TestHandleCreateInvalidBody(t *testing.T) {
 	reqBody, _ := json.Marshal(map[string]interface{}{
-		"name":           "",
-		"stock_quantity": -10,
+		"Name":          "",
+		"StockQuantity": -10,
 	})
 	req, err := http.NewRequest("POST", "/products", bytes.NewReader(reqBody))
 	if err != nil {

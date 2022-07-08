@@ -8,6 +8,8 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 
+RUN ls
+
 RUN go build /app/cmd/api/main.go
 
 ##
@@ -18,5 +20,8 @@ FROM alpine
 WORKDIR /
 
 COPY --from=build /app/main /main
+COPY --from=build /app/.env /.env
+
+RUN ls
 
 ENTRYPOINT ["/main"]

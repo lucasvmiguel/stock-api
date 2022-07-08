@@ -6,14 +6,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// product repository
 type Repository struct {
 	dbClient *gorm.DB
 }
 
 var (
+	// error when db client is nil
 	ErrNilDBClient = errors.New("DB client cannot be nil")
 )
 
+// creates a new product repository
 func NewRepository(dbClient *gorm.DB) (*Repository, error) {
 	if dbClient == nil {
 		return nil, ErrNilDBClient
@@ -22,6 +25,7 @@ func NewRepository(dbClient *gorm.DB) (*Repository, error) {
 	return &Repository{dbClient}, nil
 }
 
+// creates a product in the database
 func (r *Repository) Create(product entity.Product) (*entity.Product, error) {
 	result := r.dbClient.Create(&product)
 	if result.Error != nil {
@@ -31,6 +35,7 @@ func (r *Repository) Create(product entity.Product) (*entity.Product, error) {
 	return &product, nil
 }
 
+// gets all products from the database
 func (r *Repository) GetAll() ([]*entity.Product, error) {
 	products := []*entity.Product{}
 	result := r.dbClient.Find(&products)
@@ -41,6 +46,7 @@ func (r *Repository) GetAll() ([]*entity.Product, error) {
 	return products, nil
 }
 
+// get a product by id from the database
 func (r *Repository) GetByID(id uint) (*entity.Product, error) {
 	product := &entity.Product{}
 	result := r.dbClient.First(&product, id)
@@ -55,6 +61,7 @@ func (r *Repository) GetByID(id uint) (*entity.Product, error) {
 	return product, nil
 }
 
+// delete a product by id from the database
 func (r *Repository) DeleteByID(id uint) (*entity.Product, error) {
 	product := &entity.Product{}
 	result := r.dbClient.First(product, id)
@@ -70,6 +77,7 @@ func (r *Repository) DeleteByID(id uint) (*entity.Product, error) {
 	return product, nil
 }
 
+// update a product by id from the database
 func (r *Repository) UpdateByID(id uint, product entity.Product) (*entity.Product, error) {
 	p := &entity.Product{}
 	result := r.dbClient.First(p, id)

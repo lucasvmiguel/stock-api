@@ -8,6 +8,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
 )
 
+// handles delete product by id via http request
 func (h *Handler) HandleDeleteByID(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.ParseUint(chi.URLParam(req, "id"), 10, 64)
 	if err != nil {

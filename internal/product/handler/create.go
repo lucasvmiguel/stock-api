@@ -12,10 +12,11 @@ import (
 )
 
 type createRequestBody struct {
-	Name          string `json:"name" validate:"required"`
-	StockQuantity int    `json:"stock_quantity" validate:"numeric,min=0"`
+	Name          string `validate:"required"`
+	StockQuantity int    `validate:"numeric,min=0"`
 }
 
+// handles create product via http request
 func (h *Handler) HandleCreate(w http.ResponseWriter, req *http.Request) {
 	reqBody := createRequestBody{}
 

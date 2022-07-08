@@ -4,37 +4,44 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
-	"github.com/caarlos0/env/v6"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/internal/product/handler"
 	"github.com/lucasvmiguel/stock-api/internal/product/repository"
 	"github.com/lucasvmiguel/stock-api/pkg/cmd"
+	"gorm.io/driver/postgres"
 
-	"gorm.io/driver/sqlite"
+	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/gorm"
 )
 
-type config struct {
-	Port int `env:"PORT" envDefault:"8080"`
+type Config struct {
+	DBPort     string
+	DBHost     string
+	DBName     string
+	DBUser     string
+	DBPassword string
+	Port       string
 }
 
 func main() {
-	cfg := config{}
-	err := env.Parse(&cfg)
-	if err != nil {
-		cmd.ExitWithError("failed to read config", err)
-	}
-
-	dbClient, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	config := loadConfig()
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		config.DBHost,
+		config.DBUser,
+		config.DBPassword,
+		config.DBName,
+		config.DBPort,
+	)
+	dbClient, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		cmd.ExitWithError("failed to connect database", err)
 	}
 
-	// Migrate the schema (TODO: fix schema?)
 	dbClient.AutoMigrate(&entity.Product{})
 
 	productRepository, err := repository.NewRepository(dbClient)
@@ -65,6 +72,17 @@ func main() {
 	router.Put("/products/{id}", productHandler.HandleUpdate)
 	router.Patch("/products/{id}", productHandler.HandleUpdate)
 
-	log.Printf("listening on port %d", cfg.Port)
-	log.Println(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), router))
+	log.Printf("listening on port %s", config.Port)
+	log.Println(http.ListenAndServe(fmt.Sprintf(":%s", config.Port), router))
+}
+
+func loadConfig() Config {
+	return Config{
+		Port:       os.Getenv("PORT"),
+		DBHost:     os.Getenv("DB_HOST"),
+		DBName:     os.Getenv("DB_NAME"),
+		DBUser:     os.Getenv("DB_USER"),
+		DBPassword: os.Getenv("DB_PASSWORD"),
+		DBPort:     os.Getenv("DB_PORT"),
+	}
 }

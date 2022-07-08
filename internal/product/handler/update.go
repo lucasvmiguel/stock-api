@@ -14,10 +14,11 @@ import (
 )
 
 type updateRequestBody struct {
-	Name          string `json:"name" validate:"omitempty"`
-	StockQuantity int    `json:"stock_quantity" validate:"omitempty,numeric,min=0"`
+	Name          string `validate:"omitempty"`
+	StockQuantity int    `validate:"omitempty,numeric,min=0"`
 }
 
+// handles product update via http request
 func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.ParseUint(chi.URLParam(req, "id"), 10, 64)
 	if err != nil {

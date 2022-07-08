@@ -23,8 +23,8 @@ var (
 	}
 
 	reqBody, _ = json.Marshal(map[string]interface{}{
-		"name":           fakeProduct.Name,
-		"stock_quantity": fakeProduct.StockQuantity,
+		"Name":          fakeProduct.Name,
+		"StockQuantity": fakeProduct.StockQuantity,
 	})
 )
 

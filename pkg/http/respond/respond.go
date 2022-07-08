@@ -21,12 +21,14 @@ var (
 	contentTypeValue = "application/json"
 )
 
+// helper function that respond a HTTP in json format
 func HTTP(resp Response) {
 	resp.Writer.Header().Set(contentTypeKey, contentTypeValue)
 	resp.Writer.WriteHeader(resp.StatusCode)
 	json.NewEncoder(resp.Writer).Encode(resp.Body)
 }
 
+// helper function that respond an HTTP error in json format
 func HTTPError(w http.ResponseWriter, statusCode int, err error) {
 	w.Header().Set(contentTypeKey, contentTypeValue)
 

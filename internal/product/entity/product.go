@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// product entity
 type Product struct {
 	gorm.Model
 	Name          string

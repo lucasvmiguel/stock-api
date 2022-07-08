@@ -45,8 +45,8 @@ func TestHandleUpdate(t *testing.T) {
 
 func TestHandleUpdateInvalidBody(t *testing.T) {
 	reqBody, _ := json.Marshal(map[string]interface{}{
-		"name":           "",
-		"stock_quantity": -10,
+		"Name":          "",
+		"StockQuantity": -10,
 	})
 	req, err := http.NewRequest("PUT", "/products/1", bytes.NewReader(reqBody))
 	if err != nil {

@@ -10,6 +10,8 @@ type ValidationError struct {
 	Value string
 }
 
+// Validates if body (eg: a json body) has valid params
+// Reference: github.com/go-playground/validator
 func Validate(body interface{}) []ValidationError {
 	err := validate.Struct(body)
 	if err == nil {
