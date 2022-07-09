@@ -2,17 +2,13 @@
 
 [![Go](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/lucasvmiguel/stock-api/actions/workflows/build-and-test.yml)
 
+## Description
+
 A Stock API is a REST API written in Golang where products (with stock) can be stored, retrieved, modified and deleted.
 
 To modify a product's stock, you will have to update the `StockQuantity` field.
 
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
-
-## Install
-
-```
-git clone git@github.com:lucasvmiguel/stock-api.git
-```
 
 ## Running the app
 
@@ -345,6 +341,6 @@ Steps:
 - Remove `AutoMigrate` to implement some sort of manual migration system.
 - Implement E2E tests.
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- Request and response body in lowercase.
+- Request and response body in lowercase. Also, filtering some of the response body fields out (eg: `DeletedAt`).
 - An extra layer to handler business logic (eg: service). At the moment, handler layer is dealing with the repository layer directly, this can be considered a bad design pattern in some cases.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
