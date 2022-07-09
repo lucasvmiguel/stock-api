@@ -18,7 +18,7 @@ func (h *Handler) HandleGetByID(w http.ResponseWriter, req *http.Request) {
 
 	product, err := h.repository.GetByID(id)
 	if err != nil {
-		respond.HTTPError(w, http.StatusInternalServerError, err)
+		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return
 	}
 

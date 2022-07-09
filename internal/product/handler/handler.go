@@ -15,6 +15,8 @@ var (
 	ErrInvalidJSONBody = errors.New("invalid JSON body")
 	// error when product was not found
 	ErrNotFound = errors.New("product not found")
+	// error internal server error
+	ErrInternalServerError = errors.New("internal server error")
 )
 
 // repository interface that can be implemented by any kind of storage

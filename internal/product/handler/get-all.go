@@ -10,7 +10,7 @@ import (
 func (h *Handler) HandleGetAll(w http.ResponseWriter, req *http.Request) {
 	products, err := h.repository.GetAll()
 	if err != nil {
-		respond.HTTPError(w, http.StatusInternalServerError, err)
+		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return
 	}
 

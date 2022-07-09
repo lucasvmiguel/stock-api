@@ -34,9 +34,9 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	errors := validator.Validate(reqBody)
-	if errors != nil {
-		respond.HTTP(respond.Response{Body: errors, StatusCode: http.StatusBadRequest, Writer: w})
+	errs := validator.Validate(reqBody)
+	if errs != nil {
+		respond.HTTP(respond.Response{Body: errs, StatusCode: http.StatusBadRequest, Writer: w})
 		return
 	}
 
@@ -45,7 +45,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		StockQuantity: reqBody.StockQuantity,
 	})
 	if err != nil {
-		respond.HTTPError(w, http.StatusInternalServerError, err)
+		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return
 	}
 

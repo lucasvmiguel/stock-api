@@ -18,7 +18,7 @@ func (h *Handler) HandleDeleteByID(w http.ResponseWriter, req *http.Request) {
 
 	product, err := h.repository.DeleteByID(id)
 	if err != nil {
-		respond.HTTPError(w, http.StatusInternalServerError, err)
+		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return
 	}
 
