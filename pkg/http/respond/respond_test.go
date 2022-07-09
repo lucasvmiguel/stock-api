@@ -2,7 +2,6 @@ package respond
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +10,6 @@ import (
 )
 
 var message = "testing"
-var err = errors.New("testing")
 
 type JSONBody struct {
 	Message string

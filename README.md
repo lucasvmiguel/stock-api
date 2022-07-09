@@ -4,6 +4,8 @@
 
 A Stock API is a REST API written in Golang where products (with stock) can be stored, retrieved, modified and deleted.
 
+To modify a product's stock, you will have to update the `StockQuantity` field.
+
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
 ## Install
@@ -70,7 +72,7 @@ Note: _inspired by https://github.com/golang-standards/project-layout_
 - API/REST framework: `chi`
 - Database ORM: `Gorm`
 - Config reader: `godotenv`
-- Database: Postgres
+- Database: `Postgres`
 
 ## API Docs
 
@@ -318,6 +320,8 @@ Status: 500
 
 A file called `.env` has all config used in the project.
 
+In the future, a service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/) could (and should) be used in the project.
+
 ## CI/CD
 
 The project uses Github CI to run tests, builds (and possibly deployments). You can see the badge below:
@@ -334,10 +338,13 @@ Steps:
 
 ## Important notes
 
-- command `make docker-run` in `development` will only work correctly if the container's network is configured right. (Check more info [here](https://docs.docker.com/config/containers/container-networking/))
+- command `make docker-run` in `development` will only work correctly if the container's network is configured right. (More info [here](https://docs.docker.com/config/containers/container-networking/))
 
 ## Roadmap
 
 - Remove `AutoMigrate` to implement some sort of manual migration system.
 - Implement E2E tests.
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
+- Request and response body in lowercase.
+- An extra layer to handler business logic (eg: service). At the moment, handler layer is dealing with the repository layer directly, this can be considered a bad design pattern in some cases.
+- Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)

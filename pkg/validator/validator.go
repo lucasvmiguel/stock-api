@@ -4,6 +4,7 @@ import "github.com/go-playground/validator/v10"
 
 var validate = validator.New()
 
+// Validation error might be returned but the function Validate
 type ValidationError struct {
 	Field string
 	Tag   string

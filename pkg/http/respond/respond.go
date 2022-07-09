@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Response is a param struct for the function HTTP
 type Response struct {
 	Body       interface{}
 	StatusCode int
