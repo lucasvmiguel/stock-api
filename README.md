@@ -52,6 +52,11 @@ $ make persistence-up
 $ make test-integration
 ```
 
+## Configuration
+
+To configure how the app will run, check the following file: [.env](.env)
+To configure how the app will be built and released, check the following file: [Makefile](Makefile)
+
 ## Architecture
 
 ### Schema
