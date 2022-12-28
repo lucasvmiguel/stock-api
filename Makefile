@@ -2,10 +2,15 @@ PORT:=8080
 REGISTRY:=github.com/lucasvmiguel
 API_IMAGE:=stock-api
 VERSION:=latest
+ENV:=DEVELOPMENT
 
 test-unit:
 	scripts/mockgen.sh
-	go test -cover ./...
+	ENV=TEST go test -cover $(shell go list ./... | grep -v integration)
+
+test-integration:
+	go clean -cache
+	ENV=TEST go test -cover $(shell go list ./... | grep integration)
 
 run:
 	go run cmd/api/main.go

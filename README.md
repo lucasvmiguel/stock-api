@@ -335,7 +335,8 @@ Steps:
 ## Roadmap
 
 - Remove `AutoMigrate` to implement some sort of manual migration system.
-- Implement E2E tests.
+- Gracefully shutdown of the HTTP server
+- Organize starter package inside `cmd/api`
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
 - An extra layer to handler business logic (eg: service). At the moment, handler layer is dealing with the repository layer directly, this can be considered a bad design pattern in some cases.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
