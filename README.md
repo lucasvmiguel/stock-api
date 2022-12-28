@@ -38,6 +38,20 @@ $ make run
 make test-unit
 ```
 
+### Integration test
+
+1. Open a terminal and run the following command to start the persistence (database) required:
+
+```bash
+$ make persistence-up
+```
+
+2. In another terminal, start the application with the following command:
+
+```bash
+$ make test-integration
+```
+
 ## Architecture
 
 ### Schema
