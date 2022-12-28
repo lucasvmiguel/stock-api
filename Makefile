@@ -4,6 +4,7 @@ API_IMAGE:=stock-api
 VERSION:=latest
 
 test-unit:
+	scripts/mockgen.sh
 	go test -cover ./...
 
 run:

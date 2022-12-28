@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	gomock "github.com/golang/mock/gomock"
+	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
 func TestHandleUpdate(t *testing.T) {
@@ -18,7 +21,17 @@ func TestHandleUpdate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+			Name:          fakeProduct.Name,
+			StockQuantity: fakeProduct.StockQuantity,
+		})).
+		Return(fakeProduct, nil)
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)
@@ -53,7 +66,15 @@ func TestHandleUpdateInvalidBody(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		UpdateByID(nil, nil).
+		Return(nil, nil).
+		Times(0)
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)
@@ -76,7 +97,17 @@ func TestHandleUpdateDBFailed(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockBrokeRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+			Name:          fakeProduct.Name,
+			StockQuantity: fakeProduct.StockQuantity,
+		})).
+		Return(nil, errors.New(""))
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)

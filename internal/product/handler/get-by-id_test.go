@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -10,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	gomock "github.com/golang/mock/gomock"
 )
 
 func TestHandleGetByID(t *testing.T) {
@@ -18,7 +20,14 @@ func TestHandleGetByID(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		GetByID(gomock.Eq(uint(1))).
+		Return(fakeProduct, nil)
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetByID)
@@ -49,11 +58,18 @@ func TestHandleGetByIDNotFound(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		GetByID(gomock.Eq(nonexistentID)).
+		Return(nil, nil)
+
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("id", strconv.FormatUint(uint64(nonexistentID), 10))
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-	h, _ := NewHandler(&mockRepo{})
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetByID)
@@ -72,11 +88,18 @@ func TestHandleGetByIDDBFailed(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		GetByID(gomock.Eq(uint(1))).
+		Return(nil, errors.New(""))
+
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("id", "1")
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-	h, _ := NewHandler(&mockBrokeRepo{})
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetByID)

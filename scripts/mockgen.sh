@@ -1,0 +1,1 @@
+go run github.com/golang/mock/mockgen -source=./internal/product/handler/handler.go -package=handler -destination=./internal/product/handler/handler_mocks.go

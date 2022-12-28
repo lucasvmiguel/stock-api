@@ -2,10 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"errors"
 	"testing"
 	"time"
 
+	gomock "github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
@@ -24,66 +24,16 @@ var (
 	}
 
 	reqBody, _ = json.Marshal(map[string]interface{}{
-		"Name":          fakeProduct.Name,
-		"StockQuantity": fakeProduct.StockQuantity,
+		"name":           fakeProduct.Name,
+		"stock_quantity": fakeProduct.StockQuantity,
 	})
 )
 
-type mockRepo struct{}
-
-func (r *mockRepo) Create(product entity.Product) (*entity.Product, error) {
-	return fakeProduct, nil
-}
-
-func (r *mockRepo) GetAll() ([]*entity.Product, error) {
-	return []*entity.Product{fakeProduct, fakeProduct}, nil
-}
-
-func (r *mockRepo) GetByID(id uint) (*entity.Product, error) {
-	if id == nonexistentID {
-		return nil, nil
-	}
-	return fakeProduct, nil
-}
-
-func (r *mockRepo) UpdateByID(id uint, product entity.Product) (*entity.Product, error) {
-	if id == nonexistentID {
-		return nil, nil
-	}
-	return fakeProduct, nil
-}
-
-func (r *mockRepo) DeleteByID(id uint) (*entity.Product, error) {
-	if id == nonexistentID {
-		return nil, nil
-	}
-	return fakeProduct, nil
-}
-
-type mockBrokeRepo struct{}
-
-func (r *mockBrokeRepo) Create(product entity.Product) (*entity.Product, error) {
-	return nil, errors.New("")
-}
-
-func (r *mockBrokeRepo) GetAll() ([]*entity.Product, error) {
-	return nil, errors.New("")
-}
-
-func (r *mockBrokeRepo) GetByID(id uint) (*entity.Product, error) {
-	return nil, errors.New("")
-}
-
-func (r *mockBrokeRepo) UpdateByID(id uint, product entity.Product) (*entity.Product, error) {
-	return nil, errors.New("")
-}
-
-func (r *mockBrokeRepo) DeleteByID(id uint) (*entity.Product, error) {
-	return nil, errors.New("")
-}
-
 func TestNewHandler(t *testing.T) {
-	_, err := NewHandler(&mockRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+
+	_, err := NewHandler(repository)
 	if err != nil {
 		t.Error("should not return error when repository is not nil")
 	}

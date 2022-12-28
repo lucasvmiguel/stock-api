@@ -2,11 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	gomock "github.com/golang/mock/gomock"
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
@@ -16,7 +18,15 @@ func TestHandleGetAll(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockRepo{})
+	products := []*entity.Product{fakeProduct, fakeProduct}
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		GetAll().
+		Return(products, nil)
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)
@@ -28,7 +38,7 @@ func TestHandleGetAll(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected, _ := json.Marshal([]entity.Product{*fakeProduct, *fakeProduct})
+	expected, _ := json.Marshal(products)
 	expectedString := strings.TrimSpace(string(expected))
 	result := strings.TrimSpace(rr.Body.String())
 	if result != expectedString {
@@ -43,7 +53,14 @@ func TestHandleGetAllDBFailed(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	h, _ := NewHandler(&mockBrokeRepo{})
+	ctrl := gomock.NewController(t)
+	repository := NewMockRepository(ctrl)
+	repository.
+		EXPECT().
+		GetAll().
+		Return(nil, errors.New(""))
+
+	h, _ := NewHandler(repository)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)
