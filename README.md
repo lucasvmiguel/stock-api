@@ -66,7 +66,7 @@ $ make test-integration
 ### System Design
 
 ![system design](/docs/system-design.png)
-![layers](/docs/layers.png)
+![layers](/docs/layer.png)
 
 ### Folder/File structure
 
