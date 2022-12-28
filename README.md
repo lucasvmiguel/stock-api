@@ -6,7 +6,7 @@
 
 A Stock API is a REST API written in Golang where products (with stock) can be stored, retrieved, modified and deleted.
 
-To modify a product's stock, you will have to update the `StockQuantity` field.
+To modify a product's stock, you will have to update the `stock_quantity` field.
 
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
@@ -89,8 +89,8 @@ Headers:
 
 Body:
   {
-    "Name": "Product name",
-    "StockQuantity": 10
+    "name": "Product name",
+    "stock_quantity": 10
   }
 ```
 
@@ -103,13 +103,12 @@ Status: 201
 
 Body:
   {
-    "ID": 1,
-    "CreatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "UpdatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "DeletedAt": null,
-    "Name": "Product name",
-    "Code": "70a17d32-a670-4396-9706-bd0940152fc7",
-    "StockQuantity": 10
+    "id": 1,
+    "name": "Product name",
+    "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+    "stock_quantity": 10,
+    "created_at": "2022-07-08T18:53:57.936433+01:00",
+    "updated_at": "2022-07-08T18:53:57.936433+01:00"
   }
 ```
 
@@ -151,13 +150,12 @@ Status: 200
 Body:
   [
     {
-      "ID": 1,
-      "CreatedAt": "2022-07-08T18:53:57.936433+01:00",
-      "UpdatedAt": "2022-07-08T18:53:57.936433+01:00",
-      "DeletedAt": null,
-      "Name": "foo",
-      "Code": "70a17d32-a670-4396-9706-bd0940152fc7",
-      "StockQuantity": 1
+      "id": 1,
+      "name": "foo",
+      "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+      "stock_quantity": 1,
+      "created_at": "2022-07-08T18:53:57.936433+01:00",
+      "updated_at": "2022-07-08T18:53:57.936433+01:00"
     }
   ]
 ```
@@ -193,13 +191,12 @@ Status: 200
 
 Body:
   {
-    "ID": 1,
-    "CreatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "UpdatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "DeletedAt": null,
-    "Name": "foo",
-    "Code": "70a17d32-a670-4396-9706-bd0940152fc7",
-    "StockQuantity": 1
+    "id": 1,
+    "name": "foo",
+    "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+    "stock_quantity": 1,
+    "created_at": "2022-07-08T18:53:57.936433+01:00",
+    "updated_at": "2022-07-08T18:53:57.936433+01:00"
   }
 ```
 
@@ -232,8 +229,8 @@ Headers:
 
 Body:
   {
-    "Name": "new product name",
-    "StockQuantity": 5
+    "name": "new product name",
+    "stock_quantity": 5
   }
 ```
 
@@ -246,13 +243,12 @@ Status: 200
 
 Body:
   {
-    "ID": 1,
-    "CreatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "UpdatedAt": "2022-07-08T18:53:57.936433+01:00",
-    "DeletedAt": null,
-    "Name": "new product name",
-    "Code": "70a17d32-a670-4396-9706-bd0940152fc7",
-    "StockQuantity": 5
+    "id": 1,
+    "name": "new product name",
+    "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+    "stock_quantity": 5,
+    "created_at": "2022-07-08T18:53:57.936433+01:00",
+    "updated_at": "2022-07-08T18:53:57.936433+01:00"
   }
 ```
 
@@ -341,6 +337,5 @@ Steps:
 - Remove `AutoMigrate` to implement some sort of manual migration system.
 - Implement E2E tests.
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- Request and response body in lowercase. Also, filtering some of the response body fields out (eg: `DeletedAt`).
 - An extra layer to handler business logic (eg: service). At the moment, handler layer is dealing with the repository layer directly, this can be considered a bad design pattern in some cases.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)

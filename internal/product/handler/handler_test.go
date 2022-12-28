@@ -8,7 +8,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
-	"gorm.io/gorm"
 )
 
 var (
@@ -16,10 +15,12 @@ var (
 	fakeTime      = time.Date(1, 1, 1, 1, 1, 1, 1, time.UTC)
 
 	fakeProduct = &entity.Product{
-		Model:         gorm.Model{ID: 1, CreatedAt: fakeTime, UpdatedAt: fakeTime},
+		ID:            1,
 		Code:          uuid.New(),
 		Name:          "Product Foo",
 		StockQuantity: 10,
+		CreatedAt:     fakeTime,
+		UpdatedAt:     fakeTime,
 	}
 
 	reqBody, _ = json.Marshal(map[string]interface{}{

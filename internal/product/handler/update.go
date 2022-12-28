@@ -15,8 +15,8 @@ import (
 )
 
 type updateRequestBody struct {
-	Name          string `validate:"omitempty"`
-	StockQuantity int    `validate:"omitempty,numeric,min=0"`
+	Name          string `validate:"omitempty" json:"name"`
+	StockQuantity int    `validate:"omitempty,numeric,min=0" json:"stock_quantity"`
 }
 
 // handles product update via http request

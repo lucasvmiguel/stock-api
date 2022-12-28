@@ -12,8 +12,8 @@ import (
 )
 
 type createRequestBody struct {
-	Name          string `validate:"required"`
-	StockQuantity int    `validate:"numeric,min=0"`
+	Name          string `validate:"required" json:"name"`
+	StockQuantity int    `validate:"numeric,min=0" json:"stock_quantity"`
 }
 
 // handles create product via http request
