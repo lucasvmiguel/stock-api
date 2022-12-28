@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	s := starter.New()
-	s.Start()
+	starter.New().Start()
 }

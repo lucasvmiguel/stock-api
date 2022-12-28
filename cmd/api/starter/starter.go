@@ -3,7 +3,6 @@ package starter
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -15,6 +14,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/repository"
 	"github.com/lucasvmiguel/stock-api/pkg/cmd"
 	"github.com/lucasvmiguel/stock-api/pkg/env"
+	"github.com/lucasvmiguel/stock-api/pkg/http/server"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -59,6 +59,7 @@ func (s *Starter) Start() {
 		cmd.ExitWithError("failed to connect database", err)
 	}
 
+	// migrates the database
 	gormDB.AutoMigrate(&entity.Product{})
 
 	// creates product repository
@@ -74,20 +75,20 @@ func (s *Starter) Start() {
 
 	router := chi.NewRouter()
 
-	// middlewaress
+	// http middlewares
 	router.Use(middleware.RequestID)
 	router.Use(middleware.RealIP)
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(60 * time.Second))
 
-	// product handler
+	// product http handler
 	productHandler, err := handler.NewHandler(productRepository)
 	if err != nil {
 		cmd.ExitWithError("product handler had an error", err)
 	}
 
-	// product routes
+	// product http routes
 	router.Get("/products", productHandler.HandleGetAll)
 	router.Post("/products", productHandler.HandleCreate)
 	router.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
@@ -95,13 +96,13 @@ func (s *Starter) Start() {
 	router.Put(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
 	router.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
 
-	// health check
+	// health http route
 	router.Get("/health", func(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("Up and running"))
 	})
 
-	log.Printf("listening on port %s", config.Port)
-	log.Println(http.ListenAndServe(fmt.Sprintf(":%s", config.Port), router))
+	// start http server
+	server.Serve(config.Port, router)
 }
 
 func loadConfig() config {
