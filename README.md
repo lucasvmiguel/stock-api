@@ -68,6 +68,8 @@ $ make test-integration
 ![system design](/docs/system-design.png)
 ![layers](/docs/layer.png)
 
+PS: `Handler` has access to `Repository` (instead passing through `Service`) just because there are a few handlers too simple/small. (Creating an extra layer would complicate more than it would help)
+
 ### Folder/File structure
 
 - `/cmd`: Main applications for this project.
@@ -344,7 +346,8 @@ Steps:
 
 1. Set up Go
 2. Build
-3. Test
+3. Unit Test
+3. Integration Test
 4. Log in to the Container registry (Github)
 5. Build and push Docker images
 
@@ -354,5 +357,6 @@ Steps:
 
 ## Roadmap
 
+- If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)

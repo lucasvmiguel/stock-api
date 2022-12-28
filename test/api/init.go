@@ -43,3 +43,10 @@ func init() {
 
 	DB = s.DB
 }
+
+func reload() {
+	DB.Exec("DELETE FROM products")
+
+	DB.Exec("INSERT INTO products (name, stock_quantity) VALUES ('foo', 1);")
+	DB.Exec("INSERT INTO products (name, stock_quantity) VALUES ('bar', 2);")
+}
