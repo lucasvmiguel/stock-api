@@ -32,7 +32,7 @@ func (h *Handler) HandleCreate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.repository.Create(entity.Product{
+	product, err := h.service.Create(entity.Product{
 		Name:          reqBody.Name,
 		StockQuantity: reqBody.StockQuantity,
 	})

@@ -69,8 +69,9 @@ $ make test-integration
 - `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
 - `/pkg`: Library code that's ok to use by external applications (e.g., /pkg/mypubliclib).
+- `/test`: Integration tests that run with external apps. (eg: database)
 - `/.github`: CI/CD from Github.
-- `docker-compose.yml`: Used to spin up the persistence layer in development.
+- `docker-compose.yml`: Used to spin up the persistence layer in development and testing.
 - `.env`: configures project.
 - `Makefile`: Project's executable tasks.
 
@@ -78,11 +79,11 @@ Note: _inspired by https://github.com/golang-standards/project-layout_
 
 ### Stack
 
-- Language: `Golang`
-- API/REST framework: `chi`
-- Database ORM: `Gorm`
-- Config reader: `godotenv`
-- Database: `Postgres`
+- Language: [Go](https://go.dev/)
+- API/REST framework: [chi](https://github.com/go-chi/chi)
+- Database ORM: [GORM](https://gorm.io/)
+- Config reader: [godotenv](https://github.com/joho/godotenv)
+- Database: [Postgres](https://www.postgresql.org/)
 
 ## API Docs
 
@@ -348,8 +349,5 @@ Steps:
 
 ## Roadmap
 
-- Remove `AutoMigrate` to implement some sort of manual migration system.
-- Organize `starter` package inside `cmd/api`
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- An extra layer to handler business logic (eg: service). At the moment, handler layer is dealing with the repository layer directly, this can be considered a bad design pattern in some cases.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)

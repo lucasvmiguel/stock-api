@@ -12,6 +12,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/internal/product/handler"
 	"github.com/lucasvmiguel/stock-api/internal/product/repository"
+	"github.com/lucasvmiguel/stock-api/internal/product/service"
 	"github.com/lucasvmiguel/stock-api/pkg/cmd"
 	"github.com/lucasvmiguel/stock-api/pkg/env"
 	"github.com/lucasvmiguel/stock-api/pkg/http/server"
@@ -82,8 +83,14 @@ func (s *Starter) Start() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(60 * time.Second))
 
+	// product service
+	productService, err := service.NewService(productRepository)
+	if err != nil {
+		cmd.ExitWithError("product service had an error", err)
+	}
+
 	// product http handler
-	productHandler, err := handler.NewHandler(productRepository)
+	productHandler, err := handler.NewHandler(productRepository, productService)
 	if err != nil {
 		cmd.ExitWithError("product handler had an error", err)
 	}
@@ -97,9 +104,7 @@ func (s *Starter) Start() {
 	router.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
 
 	// health http route
-	router.Get("/health", func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("Up and running"))
-	})
+	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
 
 	// start http server
 	server.Serve(config.Port, router)

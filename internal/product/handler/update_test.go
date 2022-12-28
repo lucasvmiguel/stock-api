@@ -23,7 +23,8 @@ func TestHandleUpdate(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
-	repository.
+	service := NewMockService(ctrl)
+	service.
 		EXPECT().
 		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
@@ -31,7 +32,7 @@ func TestHandleUpdate(t *testing.T) {
 		})).
 		Return(fakeProduct, nil)
 
-	h, _ := NewHandler(repository)
+	h, _ := NewHandler(repository, service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)
@@ -68,13 +69,14 @@ func TestHandleUpdateInvalidBody(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
-	repository.
+	service := NewMockService(ctrl)
+	service.
 		EXPECT().
 		UpdateByID(nil, nil).
 		Return(nil, nil).
 		Times(0)
 
-	h, _ := NewHandler(repository)
+	h, _ := NewHandler(repository, service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)
@@ -99,7 +101,8 @@ func TestHandleUpdateDBFailed(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
-	repository.
+	service := NewMockService(ctrl)
+	service.
 		EXPECT().
 		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
@@ -107,7 +110,7 @@ func TestHandleUpdateDBFailed(t *testing.T) {
 		})).
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(repository)
+	h, _ := NewHandler(repository, service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleUpdate)

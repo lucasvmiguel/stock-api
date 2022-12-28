@@ -20,13 +20,14 @@ func TestHandleGetAll(t *testing.T) {
 
 	products := []*entity.Product{fakeProduct, fakeProduct}
 	ctrl := gomock.NewController(t)
+	service := NewMockService(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
 		GetAll().
 		Return(products, nil)
 
-	h, _ := NewHandler(repository)
+	h, _ := NewHandler(repository, service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)
@@ -54,13 +55,14 @@ func TestHandleGetAllDBFailed(t *testing.T) {
 	}
 
 	ctrl := gomock.NewController(t)
+	service := NewMockService(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
 		GetAll().
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(repository)
+	h, _ := NewHandler(repository, service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)

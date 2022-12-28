@@ -1,7 +1,6 @@
-package handler
+package service
 
 import (
-	"encoding/json"
 	"testing"
 	"time"
 
@@ -11,8 +10,7 @@ import (
 )
 
 var (
-	nonexistentID = uint(0)
-	fakeTime      = time.Date(1, 1, 1, 1, 1, 1, 1, time.UTC)
+	fakeTime = time.Date(1, 1, 1, 1, 1, 1, 1, time.UTC)
 
 	fakeProduct = &entity.Product{
 		ID:            1,
@@ -22,27 +20,21 @@ var (
 		CreatedAt:     fakeTime,
 		UpdatedAt:     fakeTime,
 	}
-
-	reqBody, _ = json.Marshal(map[string]interface{}{
-		"name":           fakeProduct.Name,
-		"stock_quantity": fakeProduct.StockQuantity,
-	})
 )
 
-func TestNewHandler(t *testing.T) {
+func TestNewService(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
-	service := NewMockService(ctrl)
 
-	_, err := NewHandler(repository, service)
+	_, err := NewService(repository)
 	if err != nil {
 		t.Error("should not return error when repository is not nil")
 	}
 }
 
-func TestNewHandlerError(t *testing.T) {
-	_, err := NewHandler(nil, nil)
+func TestNewServiceError(t *testing.T) {
+	_, err := NewService(nil)
 	if err == nil {
-		t.Error("error should be returned when no repository/service is passed")
+		t.Error("error should be returned when no repository is passed")
 	}
 }

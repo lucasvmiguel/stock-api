@@ -40,7 +40,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.repository.UpdateByID(id, entity.Product{
+	product, err := h.service.UpdateByID(id, entity.Product{
 		Name:          reqBody.Name,
 		StockQuantity: reqBody.StockQuantity,
 	})
