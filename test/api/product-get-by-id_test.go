@@ -26,12 +26,13 @@ func TestGetByIDProduct_Successfully(t *testing.T) {
 		Response: expect.Response{
 			StatusCode: http.StatusOK,
 			Body: `{
+				"id": "<<PRESENCE>>",
 				"name":"foo",
-				"stock_quantity":1
+				"stock_quantity":1,
+				"code": "<<PRESENCE>>",
+				"created_at": "<<PRESENCE>>",
+				"updated_at": "<<PRESENCE>>"
 			}`,
-			IgnoreBodyFields: []string{
-				"id", "code", "created_at", "updated_at",
-			},
 		},
 	})
 

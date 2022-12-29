@@ -26,10 +26,13 @@ func TestCreateProduct_Successfully(t *testing.T) {
 		Response: expect.Response{
 			StatusCode: http.StatusCreated,
 			Body: `{
+				"id": "<<PRESENCE>>",
 				"name":"product test",
-				"stock_quantity":5
+				"stock_quantity":5,
+				"code": "<<PRESENCE>>",
+				"created_at": "<<PRESENCE>>",
+				"updated_at": "<<PRESENCE>>"
 			}`,
-			IgnoreBodyFields: []string{"id", "code", "created_at", "updated_at"},
 		},
 		Assertions: []assertion.Assertion{
 			&assertion.SQL{

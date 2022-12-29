@@ -22,18 +22,22 @@ func TestGetAllProduct_Successfully(t *testing.T) {
 			StatusCode: http.StatusOK,
 			Body: `[
 				{
-					"name":"foo",
-					"stock_quantity":1
+					"id": "<<PRESENCE>>",
+					"name": "foo",
+					"code": "<<PRESENCE>>",
+					"stock_quantity": 1,
+					"created_at": "<<PRESENCE>>",
+					"updated_at": "<<PRESENCE>>"
 				},
 				{
-					"name":"bar",
-					"stock_quantity":2
+					"id": "<<PRESENCE>>",
+					"name": "bar",
+					"code": "<<PRESENCE>>",
+					"stock_quantity": 2,
+					"created_at": "<<PRESENCE>>",
+					"updated_at": "<<PRESENCE>>"
 				}
 			]`,
-			IgnoreBodyFields: []string{
-				"0.id", "0.code", "0.created_at", "0.updated_at",
-				"1.id", "1.code", "1.created_at", "1.updated_at",
-			},
 		},
 	})
 

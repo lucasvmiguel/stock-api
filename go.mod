@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
-	github.com/lucasvmiguel/integration v1.0.4
+	github.com/lucasvmiguel/integration v1.0.5
 	github.com/pkg/errors v0.9.1
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/gorm v1.24.2
@@ -28,6 +28,7 @@ require (
 	github.com/jarcoal/httpmock v1.2.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/kinbiko/jsonassert v1.1.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
