@@ -18,7 +18,7 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 	row := DB.QueryRow("SELECT id FROM products ORDER BY id LIMIT 1")
 	row.Scan(&id)
 
-	err := integration.Test(integration.TestCase{
+	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestCreateProduct_Successfully",
 		Request: call.Request{
 			URL:    fmt.Sprintf("http://localhost:8080/products/%d", id),

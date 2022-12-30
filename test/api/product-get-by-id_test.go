@@ -17,7 +17,7 @@ func TestGetByIDProduct_Successfully(t *testing.T) {
 	row := DB.QueryRow("SELECT id FROM products LIMIT 1")
 	row.Scan(&id)
 
-	err := integration.Test(integration.TestCase{
+	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestGetAllProduct_Successfully",
 		Request: call.Request{
 			URL:    fmt.Sprintf("http://localhost:8080/products/%d", id),

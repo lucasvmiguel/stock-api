@@ -13,7 +13,7 @@ import (
 func TestCreateProduct_Successfully(t *testing.T) {
 	reload()
 
-	err := integration.Test(integration.TestCase{
+	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestCreateProduct_Successfully",
 		Request: call.Request{
 			URL:    "http://localhost:8080/products",
