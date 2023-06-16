@@ -38,6 +38,9 @@ type Service interface {
 	DeleteByID(id uint) (*entity.Product, error)
 }
 
+// productResponseBody is the response body for a product
+type productResponseBody entity.Product
+
 // product handler that has methods to handle different types of http requests
 type Handler struct {
 	service                Service
@@ -65,4 +68,16 @@ func NewHandler(args NewHandlerArgs) (*Handler, error) {
 		service:                args.Service,
 		paginationDefaultLimit: args.PaginationDefaultLimit,
 	}, nil
+}
+
+// buildProductResponseBody builds the response body for a single product
+func (h *Handler) buildProductResponseBody(product *entity.Product) productResponseBody {
+	return productResponseBody{
+		ID:            product.ID,
+		Name:          product.Name,
+		StockQuantity: product.StockQuantity,
+		Code:          product.Code,
+		CreatedAt:     product.CreatedAt,
+		UpdatedAt:     product.UpdatedAt,
+	}
 }

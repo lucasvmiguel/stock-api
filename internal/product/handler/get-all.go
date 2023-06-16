@@ -3,8 +3,12 @@ package handler
 import (
 	"net/http"
 
+	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
 )
+
+// GetAllResponseBody is the response body for get all products
+type getAllResponseBody []productResponseBody
 
 // handles get all products via http request
 func (h *Handler) HandleGetAll(w http.ResponseWriter, req *http.Request) {
@@ -15,8 +19,18 @@ func (h *Handler) HandleGetAll(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       products,
+		Body:       h.buildGetAllResponseBody(products),
 		StatusCode: http.StatusOK,
 		Writer:     w,
 	})
+}
+
+func (h *Handler) buildGetAllResponseBody(products []*entity.Product) getAllResponseBody {
+	getAllResponseBody := getAllResponseBody{}
+
+	for _, product := range products {
+		getAllResponseBody = append(getAllResponseBody, h.buildProductResponseBody(product))
+	}
+
+	return getAllResponseBody
 }

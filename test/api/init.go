@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/joho/godotenv"
 	"github.com/lucasvmiguel/stock-api/cmd/api/starter"
 )
@@ -42,9 +43,12 @@ func init() {
 	}
 
 	DB = s.DB
+	spew.Dump("DB1", s.DB)
+	spew.Dump("DB2", DB)
 }
 
 func reload() {
+	spew.Dump("DB3", DB)
 	DB.Exec("DELETE FROM products")
 
 	DB.Exec("INSERT INTO products (name, stock_quantity) VALUES ('foo', 1);")

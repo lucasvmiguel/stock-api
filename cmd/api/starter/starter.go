@@ -3,40 +3,27 @@ package starter
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
-	"os"
-	"strconv"
-	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/lucasvmiguel/stock-api/internal/product/entity"
-	"github.com/lucasvmiguel/stock-api/internal/product/handler"
-	"github.com/lucasvmiguel/stock-api/internal/product/repository"
-	"github.com/lucasvmiguel/stock-api/internal/product/service"
-	"github.com/lucasvmiguel/stock-api/pkg/cmd"
-	"github.com/lucasvmiguel/stock-api/pkg/env"
-	"github.com/lucasvmiguel/stock-api/pkg/http/server"
-	"github.com/pkg/errors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/lucasvmiguel/stock-api/internal/product/entity"
+	"github.com/lucasvmiguel/stock-api/pkg/cmd"
+	"github.com/lucasvmiguel/stock-api/pkg/http/server"
 )
-
-type config struct {
-	DBPort                 string
-	DBHost                 string
-	DBName                 string
-	DBUser                 string
-	DBPassword             string
-	Port                   string
-	ENV                    env.Environment
-	PaginationDefaultLimit int
-}
 
 type Starter struct {
 	DB *sql.DB
+
+	config config
+	gormDB *gorm.DB
+	router *chi.Mux
+
+	repositories repositories
+	services     services
+	handlers     handlers
 }
 
 func New() *Starter {
@@ -44,98 +31,61 @@ func New() *Starter {
 }
 
 func (s *Starter) Start() {
-	config, err := loadConfig()
+	var err error
+
+	// loads config
+	s.config, err = loadConfig()
 	if err != nil {
 		cmd.ExitWithError("failed to load config", err)
 	}
 
-	var gormDB *gorm.DB
-
-	// starts connection with database
+	// creates dsn string
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		config.DBHost,
-		config.DBUser,
-		config.DBPassword,
-		config.DBName,
-		config.DBPort,
+		s.config.DBHost,
+		s.config.DBUser,
+		s.config.DBPassword,
+		s.config.DBName,
+		s.config.DBPort,
 	)
 
-	gormDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// starts connection with database
+	s.gormDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		cmd.ExitWithError("failed to connect database", err)
 	}
+	spew.Dump(s.gormDB)
 
 	// migrates the database
-	gormDB.AutoMigrate(&entity.Product{})
+	s.gormDB.AutoMigrate(&entity.Product{})
 
-	// creates product repository
-	productRepository, err := repository.NewRepository(gormDB)
-	if err != nil {
-		cmd.ExitWithError("failed to create product repository", err)
-	}
-
-	s.DB, err = gormDB.DB()
+	// adds sql DB to starter struct
+	s.DB, err = s.gormDB.DB()
 	if err != nil {
 		cmd.ExitWithError("failed to return sql DB", err)
 	}
 
-	router := chi.NewRouter()
-
-	// http middlewares
-	router.Use(middleware.RequestID)
-	router.Use(middleware.RealIP)
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.Timeout(60 * time.Second))
-
-	// product service
-	productService, err := service.NewService(productRepository)
+	// creates repositories
+	s.repositories, err = s.createRepositories()
 	if err != nil {
-		cmd.ExitWithError("product service had an error", err)
+		cmd.ExitWithError("failed to create repositories", err)
 	}
 
-	// product http handler
-	productHandler, err := handler.NewHandler(handler.NewHandlerArgs{
-		Service:                productService,
-		PaginationDefaultLimit: config.PaginationDefaultLimit,
-	})
+	// creates services
+	s.services, err = s.createServices()
 	if err != nil {
-		cmd.ExitWithError("product handler had an error", err)
+		cmd.ExitWithError("failed to create services", err)
 	}
 
-	router.Route("/api/v1", func(r chi.Router) {
-		// product http routes
-		r.Get("/products", productHandler.HandleGetPaginated)
-		r.Get("/products/all", productHandler.HandleGetAll)
-		r.Post("/products", productHandler.HandleCreate)
-		r.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
-		r.Delete(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleDeleteByID)
-		r.Put(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
-		r.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
-	})
+	// creates handlers
+	s.handlers, err = s.createHandlers()
+	if err != nil {
+		cmd.ExitWithError("failed to create handlers", err)
+	}
 
-	// health http route
-	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
+	// creates routes
+	s.router = chi.NewRouter()
+	s.createRoutes()
 
 	// start http server
-	server.Serve(config.Port, router)
-}
-
-func loadConfig() (config, error) {
-	paginationDefaultLimitStr := os.Getenv("PAGINATION_DEFAULT_LIMIT")
-	paginationDefaultLimit, err := strconv.Atoi(paginationDefaultLimitStr)
-	if err != nil {
-		return config{}, errors.Wrap(err, "failed to convert PAGINATION_DEFAULT_LIMIT env var to int")
-	}
-
-	return config{
-		Port:                   os.Getenv("PORT"),
-		DBHost:                 os.Getenv("DB_HOST"),
-		DBName:                 os.Getenv("DB_NAME"),
-		DBUser:                 os.Getenv("DB_USER"),
-		DBPassword:             os.Getenv("DB_PASSWORD"),
-		DBPort:                 os.Getenv("DB_PORT"),
-		ENV:                    env.Environment(os.Getenv("ENV")),
-		PaginationDefaultLimit: paginationDefaultLimit,
-	}, nil
+	server.Serve(s.config.Port, s.router)
 }

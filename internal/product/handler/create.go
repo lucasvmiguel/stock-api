@@ -11,6 +11,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
 
+// createRequestBody is the request body for create product
 type createRequestBody struct {
 	Name          string `validate:"required" json:"name"`
 	StockQuantity int    `validate:"numeric,min=0" json:"stock_quantity"`
@@ -42,7 +43,7 @@ func (h *Handler) HandleCreate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       product,
+		Body:       h.buildProductResponseBody(product),
 		StatusCode: http.StatusCreated,
 		Writer:     w,
 	})
