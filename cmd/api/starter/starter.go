@@ -90,7 +90,7 @@ func (s *Starter) Start() {
 	}
 
 	// product http handler
-	productHandler, err := handler.NewHandler(productRepository, productService)
+	productHandler, err := handler.NewHandler(productService)
 	if err != nil {
 		cmd.ExitWithError("product handler had an error", err)
 	}

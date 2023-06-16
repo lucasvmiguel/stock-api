@@ -20,13 +20,12 @@ func TestHandleDeleteByID(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	repository := NewMockRepository(ctrl)
-	repository.
+	service.
 		EXPECT().
 		DeleteByID(gomock.Eq(uint(1))).
 		Return(fakeProduct, nil)
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleDeleteByID)
@@ -51,8 +50,7 @@ func TestHandleDeleteByIDNotFound(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	repository := NewMockRepository(ctrl)
-	repository.
+	service.
 		EXPECT().
 		DeleteByID(gomock.Eq(nonexistentID)).
 		Return(nil, nil)
@@ -61,7 +59,7 @@ func TestHandleDeleteByIDNotFound(t *testing.T) {
 	rctx.URLParams.Add("id", strconv.FormatUint(uint64(nonexistentID), 10))
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleDeleteByID)
@@ -82,8 +80,7 @@ func TestHandleDeleteByIDDBFailed(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	repository := NewMockRepository(ctrl)
-	repository.
+	service.
 		EXPECT().
 		DeleteByID(gomock.Eq(uint(1))).
 		Return(nil, errors.New(""))
@@ -92,7 +89,7 @@ func TestHandleDeleteByIDDBFailed(t *testing.T) {
 	rctx.URLParams.Add("id", "1")
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleDeleteByID)

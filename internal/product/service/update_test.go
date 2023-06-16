@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
+
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 

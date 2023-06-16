@@ -7,6 +7,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	"github.com/google/uuid"
+
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
@@ -31,18 +32,17 @@ var (
 
 func TestNewHandler(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	repository := NewMockRepository(ctrl)
 	service := NewMockService(ctrl)
 
-	_, err := NewHandler(repository, service)
+	_, err := NewHandler(service)
 	if err != nil {
-		t.Error("should not return error when repository is not nil")
+		t.Error("should not return error when service is not nil")
 	}
 }
 
 func TestNewHandlerError(t *testing.T) {
-	_, err := NewHandler(nil, nil)
+	_, err := NewHandler(nil)
 	if err == nil {
-		t.Error("error should be returned when no repository/service is passed")
+		t.Error("error should be returned when no service is passed")
 	}
 }

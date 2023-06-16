@@ -4,9 +4,7 @@
 
 ## Description
 
-A Stock API is a REST API written in Golang where products (with stock) can be stored, retrieved, modified and deleted.
-
-To modify a product's stock, you will have to update the `stock_quantity` field.
+A Stock API is a REST API written in Go where products can be created, read, updated and deleted.
 
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
@@ -68,14 +66,12 @@ $ make test-integration
 ![system design](/docs/system-design.png)
 ![layers](/docs/layer.png)
 
-PS: `Handler` has access to `Repository` (instead passing through `Service`) just because there are a few handlers too simple/small. (Creating an extra layer would complicate more than it would help)
-
 ### Folder/File structure
 
 - `/cmd`: Main applications for this project.
 - `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
-- `/pkg`: Library code that's ok to use by external applications (e.g., /pkg/mypubliclib).
+- `/pkg`: Library code that's ok to use by external applications (eg: `/pkg/mypubliclib`).
 - `/test`: Integration tests that run with external apps. (eg: database)
 - `/.github`: CI/CD from Github.
 - `docker-compose.yml`: Used to spin up the persistence layer in development and testing.
@@ -360,3 +356,4 @@ Steps:
 - If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
+- Pagination is a must when dealing with so much data. So, before deploying this application to production, it's probably a good idea to modify the get all products endpoint to return products paginated.

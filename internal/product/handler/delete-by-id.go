@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
 	"github.com/lucasvmiguel/stock-api/pkg/parser"
 )
@@ -16,7 +17,7 @@ func (h *Handler) HandleDeleteByID(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.repository.DeleteByID(id)
+	product, err := h.service.DeleteByID(id)
 	if err != nil {
 		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return

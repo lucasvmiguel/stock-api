@@ -1,8 +1,9 @@
 package service
 
 import (
-	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/pkg/errors"
+
+	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
 // Updates a product by id
