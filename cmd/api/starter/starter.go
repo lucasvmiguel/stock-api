@@ -114,9 +114,8 @@ func (s *Starter) Start() {
 		r.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
 	})
 
-	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
-
 	// health http route
+	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
 
 	// start http server
 	server.Serve(config.Port, router)
