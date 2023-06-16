@@ -347,9 +347,9 @@ Steps:
 1. Set up Go
 2. Build
 3. Unit Test
-3. Integration Test
-4. Log in to the Container registry (Github)
-5. Build and push Docker images
+4. Integration Test
+5. Log in to the Container registry (Github)
+6. Build and push Docker images
 
 ## Important notes
 

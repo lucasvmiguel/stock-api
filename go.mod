@@ -1,6 +1,6 @@
 module github.com/lucasvmiguel/stock-api
 
-go 1.18
+go 1.20
 
 require (
 	github.com/go-chi/chi/v5 v5.0.7
@@ -33,7 +33,7 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
-	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/net v0.3.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
 	golang.org/x/tools v0.4.0 // indirect
