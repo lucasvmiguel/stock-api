@@ -29,7 +29,7 @@ func (h *Handler) HandleGetByID(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       product,
+		Body:       h.buildProductResponseBody(product),
 		StatusCode: http.StatusOK,
 		Writer:     w,
 	})

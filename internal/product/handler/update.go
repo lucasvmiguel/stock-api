@@ -14,6 +14,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
 
+// updateRequestBody is the request body for update product
 type updateRequestBody struct {
 	Name          string `validate:"omitempty" json:"name"`
 	StockQuantity int    `validate:"omitempty,numeric,min=0" json:"stock_quantity"`
@@ -55,7 +56,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       product,
+		Body:       h.buildProductResponseBody(product),
 		StatusCode: http.StatusOK,
 		Writer:     w,
 	})
