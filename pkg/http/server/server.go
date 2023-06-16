@@ -35,7 +35,7 @@ func Serve(port string, router *chi.Mux) {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	log.Printf("HTTP server listening on port %s", port)
+	log.Printf("HTTP server on %s", fmt.Sprintf("http://%s", srv.Addr))
 
 	<-done
 	log.Print("HTTP server stopped")

@@ -145,14 +145,64 @@ Status: 500
 </details>
 
 <details>
+<summary>Get products paginated</summary>
+
+Endpoint to get products paginated
+
+#### Request
+
+##### Query Parameters
+
+- `cursor`: last id from the previous page. use the `next_cursor` on the response to pass as query parameter
+- `limit`: limit of products to be returned (min=1, max=100)
+
+```
+Endpoint: [GET] /products?limit=10&cursor=2
+
+Headers:
+  Content-Type: application/json
+```
+
+#### Response
+
+**Success**
+
+```
+Status: 200
+
+Body:
+  {
+    "items": [
+      {
+        "id": 1,
+        "name": "foo",
+        "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+        "stock_quantity": 1,
+        "created_at": "2022-07-08T18:53:57.936433+01:00",
+        "updated_at": "2022-07-08T18:53:57.936433+01:00"
+      }
+    ],
+    next_cursor: 2
+  }
+```
+
+**Internal Server Error**
+
+```
+Status: 500
+```
+
+</details>
+
+<details>
 <summary>Get all products</summary>
 
-Endpoint to get all products
+Endpoint to get all products (does not have pagination)
 
 #### Request
 
 ```
-Endpoint: [GET] /products
+Endpoint: [GET] /products/all
 
 Headers:
   Content-Type: application/json
@@ -356,4 +406,6 @@ Steps:
 - If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
 - API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
 - Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
-- Pagination is a must when dealing with so much data. So, before deploying this application to production, it's probably a good idea to modify the get all products endpoint to return products paginated.
+- Stress test
+- Improve Starter file to scale for more entities
+- Bug: product code is returning empty

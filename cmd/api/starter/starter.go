@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -16,6 +17,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/pkg/cmd"
 	"github.com/lucasvmiguel/stock-api/pkg/env"
 	"github.com/lucasvmiguel/stock-api/pkg/http/server"
+	"github.com/pkg/errors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -23,13 +25,14 @@ import (
 )
 
 type config struct {
-	DBPort     string
-	DBHost     string
-	DBName     string
-	DBUser     string
-	DBPassword string
-	Port       string
-	ENV        env.Environment
+	DBPort                 string
+	DBHost                 string
+	DBName                 string
+	DBUser                 string
+	DBPassword             string
+	Port                   string
+	ENV                    env.Environment
+	PaginationDefaultLimit int
 }
 
 type Starter struct {
@@ -41,10 +44,12 @@ func New() *Starter {
 }
 
 func (s *Starter) Start() {
-	config := loadConfig()
+	config, err := loadConfig()
+	if err != nil {
+		cmd.ExitWithError("failed to load config", err)
+	}
 
 	var gormDB *gorm.DB
-	var err error
 
 	// starts connection with database
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
@@ -90,13 +95,17 @@ func (s *Starter) Start() {
 	}
 
 	// product http handler
-	productHandler, err := handler.NewHandler(productService)
+	productHandler, err := handler.NewHandler(handler.NewHandlerArgs{
+		Service:                productService,
+		PaginationDefaultLimit: config.PaginationDefaultLimit,
+	})
 	if err != nil {
 		cmd.ExitWithError("product handler had an error", err)
 	}
 
 	// product http routes
-	router.Get("/products", productHandler.HandleGetAll)
+	router.Get("/products", productHandler.HandleGetPaginated)
+	router.Get("/products/all", productHandler.HandleGetAll)
 	router.Post("/products", productHandler.HandleCreate)
 	router.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
 	router.Delete(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleDeleteByID)
@@ -110,14 +119,21 @@ func (s *Starter) Start() {
 	server.Serve(config.Port, router)
 }
 
-func loadConfig() config {
-	return config{
-		Port:       os.Getenv("PORT"),
-		DBHost:     os.Getenv("DB_HOST"),
-		DBName:     os.Getenv("DB_NAME"),
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBPort:     os.Getenv("DB_PORT"),
-		ENV:        env.Environment(os.Getenv("ENV")),
+func loadConfig() (config, error) {
+	paginationDefaultLimitStr := os.Getenv("PAGINATION_DEFAULT_LIMIT")
+	paginationDefaultLimit, err := strconv.Atoi(paginationDefaultLimitStr)
+	if err != nil {
+		return config{}, errors.Wrap(err, "failed to convert PAGINATION_DEFAULT_LIMIT env var to int")
 	}
+
+	return config{
+		Port:                   os.Getenv("PORT"),
+		DBHost:                 os.Getenv("DB_HOST"),
+		DBName:                 os.Getenv("DB_NAME"),
+		DBUser:                 os.Getenv("DB_USER"),
+		DBPassword:             os.Getenv("DB_PASSWORD"),
+		DBPort:                 os.Getenv("DB_PORT"),
+		ENV:                    env.Environment(os.Getenv("ENV")),
+		PaginationDefaultLimit: paginationDefaultLimit,
+	}, nil
 }

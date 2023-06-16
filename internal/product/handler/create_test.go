@@ -30,7 +30,7 @@ func TestHandleCreate(t *testing.T) {
 		})).
 		Return(fakeProduct, nil)
 
-	h, _ := NewHandler(service)
+	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)
@@ -52,7 +52,7 @@ func TestHandleCreate(t *testing.T) {
 }
 
 func TestHandleCreateInvalidBody(t *testing.T) {
-	reqBody, _ := json.Marshal(map[string]interface{}{
+	reqBody, _ := json.Marshal(map[string]any{
 		"name":           "",
 		"stock_quantity": -10,
 	})
@@ -69,7 +69,7 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 		Return(nil, nil).
 		Times(0)
 
-	h, _ := NewHandler(service)
+	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)
@@ -98,7 +98,7 @@ func TestHandleCreateDBFailed(t *testing.T) {
 		})).
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(service)
+	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)
