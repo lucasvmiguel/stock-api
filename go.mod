@@ -10,8 +10,8 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/lucasvmiguel/integration v1.0.6
 	github.com/pkg/errors v0.9.1
-	gorm.io/driver/postgres v0.2.4
-	gorm.io/gorm v1.24.2
+	gorm.io/driver/postgres v1.5.2
+	gorm.io/gorm v1.25.1
 )
 
 require (
@@ -21,6 +21,9 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/hashicorp/go-uuid v1.0.2 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/pgx/v5 v5.4.0 // indirect
 	github.com/jarcoal/httpmock v1.3.0 // indirect
 	github.com/jcmturner/aescts/v2 v2.0.0 // indirect
 	github.com/jcmturner/dnsutils/v2 v2.0.0 // indirect

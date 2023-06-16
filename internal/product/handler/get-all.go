@@ -8,7 +8,7 @@ import (
 
 // handles get all products via http request
 func (h *Handler) HandleGetAll(w http.ResponseWriter, req *http.Request) {
-	products, err := h.repository.GetAll()
+	products, err := h.service.GetAll()
 	if err != nil {
 		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return

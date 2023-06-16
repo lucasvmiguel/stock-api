@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
+
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
@@ -20,7 +21,6 @@ func TestHandleCreate(t *testing.T) {
 	}
 
 	ctrl := gomock.NewController(t)
-	repository := NewMockRepository(ctrl)
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
@@ -30,7 +30,7 @@ func TestHandleCreate(t *testing.T) {
 		})).
 		Return(fakeProduct, nil)
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)
@@ -62,7 +62,6 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 	}
 
 	ctrl := gomock.NewController(t)
-	repository := NewMockRepository(ctrl)
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
@@ -70,7 +69,7 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 		Return(nil, nil).
 		Times(0)
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)
@@ -90,7 +89,6 @@ func TestHandleCreateDBFailed(t *testing.T) {
 	}
 
 	ctrl := gomock.NewController(t)
-	repository := NewMockRepository(ctrl)
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
@@ -100,7 +98,7 @@ func TestHandleCreateDBFailed(t *testing.T) {
 		})).
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleCreate)

@@ -5,27 +5,19 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
-
-	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
-func TestCreate_Successfully(t *testing.T) {
+func TestDeleteByID_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
-			Name:          fakeProduct.Name,
-			StockQuantity: fakeProduct.StockQuantity,
-		})).
+		DeleteByID(gomock.Eq(fakeProduct.ID)).
 		Return(fakeProduct, nil)
 
 	h, _ := NewService(repository)
 
-	p, err := h.Create(entity.Product{
-		Name:          fakeProduct.Name,
-		StockQuantity: fakeProduct.StockQuantity,
-	})
+	p, err := h.DeleteByID(fakeProduct.ID)
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -35,23 +27,17 @@ func TestCreate_Successfully(t *testing.T) {
 	}
 }
 
-func TestCreate_RepositoryWithError(t *testing.T) {
+func TestDeleteByID_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
-			Name:          fakeProduct.Name,
-			StockQuantity: fakeProduct.StockQuantity,
-		})).
+		DeleteByID(gomock.Eq(fakeProduct.ID)).
 		Return(nil, errors.New(""))
 
 	h, _ := NewService(repository)
 
-	p, err := h.Create(entity.Product{
-		Name:          fakeProduct.Name,
-		StockQuantity: fakeProduct.StockQuantity,
-	})
+	p, err := h.DeleteByID(fakeProduct.ID)
 	if err == nil {
 		t.Error("error should not be nil")
 	}

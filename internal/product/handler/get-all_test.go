@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	gomock "github.com/golang/mock/gomock"
+
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
@@ -21,13 +22,12 @@ func TestHandleGetAll(t *testing.T) {
 	products := []*entity.Product{fakeProduct, fakeProduct}
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	repository := NewMockRepository(ctrl)
-	repository.
+	service.
 		EXPECT().
 		GetAll().
 		Return(products, nil)
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)
@@ -56,13 +56,12 @@ func TestHandleGetAllDBFailed(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	repository := NewMockRepository(ctrl)
-	repository.
+	service.
 		EXPECT().
 		GetAll().
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(repository, service)
+	h, _ := NewHandler(service)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)

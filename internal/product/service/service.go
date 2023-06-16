@@ -18,8 +18,11 @@ type Service struct {
 
 // repository interface that can be implemented by any kind of storage
 type Repository interface {
-	UpdateByID(id uint, product entity.Product) (*entity.Product, error)
 	Create(product entity.Product) (*entity.Product, error)
+	GetAll() ([]*entity.Product, error)
+	GetByID(id uint) (*entity.Product, error)
+	UpdateByID(id uint, product entity.Product) (*entity.Product, error)
+	DeleteByID(id uint) (*entity.Product, error)
 }
 
 // creates a new product service
