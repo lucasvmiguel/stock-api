@@ -42,19 +42,19 @@ func (h *Handler) HandleGetPaginated(w http.ResponseWriter, req *http.Request) {
 
 func (h *Handler) buildPaginatedQueryParams(req *http.Request) (getPaginatedQueryParams, error) {
 	paginatedQueryParams := getPaginatedQueryParams{}
-
 	limitQueryParam := req.URL.Query().Get("limit")
-	if limitQueryParam == "" {
-		paginatedQueryParams.Limit = h.paginationDefaultLimit
-	} else {
+	cursorQueryParam := req.URL.Query().Get("cursor")
+
+	if limitQueryParam != "" {
 		limit, err := strconv.Atoi(limitQueryParam)
 		if err != nil {
 			return paginatedQueryParams, ErrInvalidLimitQueryParam
 		}
 		paginatedQueryParams.Limit = limit
+	} else {
+		paginatedQueryParams.Limit = h.paginationDefaultLimit
 	}
 
-	cursorQueryParam := req.URL.Query().Get("cursor")
 	if cursorQueryParam != "" {
 		cursor, err := strconv.Atoi(cursorQueryParam)
 		if err != nil {

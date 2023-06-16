@@ -103,17 +103,20 @@ func (s *Starter) Start() {
 		cmd.ExitWithError("product handler had an error", err)
 	}
 
-	// product http routes
-	router.Get("/products", productHandler.HandleGetPaginated)
-	router.Get("/products/all", productHandler.HandleGetAll)
-	router.Post("/products", productHandler.HandleCreate)
-	router.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
-	router.Delete(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleDeleteByID)
-	router.Put(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
-	router.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
+	router.Route("/api/v1", func(r chi.Router) {
+		// product http routes
+		r.Get("/products", productHandler.HandleGetPaginated)
+		r.Get("/products/all", productHandler.HandleGetAll)
+		r.Post("/products", productHandler.HandleCreate)
+		r.Get(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleGetByID)
+		r.Delete(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleDeleteByID)
+		r.Put(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
+		r.Patch(fmt.Sprintf("/products/{%s}", handler.FieldID), productHandler.HandleUpdate)
+	})
+
+	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
 
 	// health http route
-	router.Get("/health", func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("Up and running")) })
 
 	// start http server
 	server.Serve(config.Port, router)

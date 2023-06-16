@@ -44,10 +44,30 @@ make test-unit
 $ make persistence-up
 ```
 
-2. In another terminal, start the application with the following command:
+2. In another terminal, run the integration test with the following command:
 
 ```bash
 $ make test-integration
+```
+
+### Stress test
+
+1. Open a terminal and run the following command to start the persistence (database) required:
+
+```bash
+$ make persistence-up
+```
+
+2. In a new terminal, start the application with the following command:
+
+```bash
+$ make run
+```
+
+2. In another terminal, run the stress test with the following command
+
+```bash
+$ make test-stress
 ```
 
 ## Configuration
@@ -100,7 +120,7 @@ Endpoint that creates a product
 #### Request
 
 ```
-Endpoint: [POST] /products
+Endpoint: [POST] /api/v1/products
 
 Headers:
   Content-Type: application/json
@@ -153,11 +173,11 @@ Endpoint to get products paginated
 
 ##### Query Parameters
 
-- `cursor`: last id from the previous page. use the `next_cursor` on the response to pass as query parameter
+- `cursor`: use the response's `next_cursor` field
 - `limit`: limit of products to be returned (min=1, max=100)
 
 ```
-Endpoint: [GET] /products?limit=10&cursor=2
+Endpoint: [GET] /api/v1/products?limit=10&cursor=2
 
 Headers:
   Content-Type: application/json
@@ -182,7 +202,7 @@ Body:
         "updated_at": "2022-07-08T18:53:57.936433+01:00"
       }
     ],
-    next_cursor: 2
+    "next_cursor": 2
   }
 ```
 
@@ -202,7 +222,7 @@ Endpoint to get all products (does not have pagination)
 #### Request
 
 ```
-Endpoint: [GET] /products/all
+Endpoint: [GET] /api/v1/products/all
 
 Headers:
   Content-Type: application/json
@@ -244,7 +264,7 @@ Endpoint to get a product by id
 #### Request
 
 ```
-Endpoint: [GET] /products/{id}
+Endpoint: [GET] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -290,7 +310,7 @@ Endpoint that updates a product by id
 #### Request
 
 ```
-Endpoint: [PUT] /products/{id}
+Endpoint: [PUT] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -348,7 +368,7 @@ Endpoint to delete a product by id
 #### Request
 
 ```
-Endpoint: [DELETE] /products/{id}
+Endpoint: [DELETE] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -403,9 +423,9 @@ Steps:
 
 ## Roadmap
 
-- If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
-- API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
-- Stress test
-- Improve Starter file to scale for more entities
 - Bug: product code is returning empty
+- Improvement: If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
+- Improvement: API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
+- Improvement: Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
+- Improvement: [starter.go](cmd/api/starter/starter.go) file to scale to more entities, not just product
+- Improvement: Response body should not depend on the service return struct

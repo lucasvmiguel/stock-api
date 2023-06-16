@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	gomock "github.com/golang/mock/gomock"
+
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/pagination"
 )
