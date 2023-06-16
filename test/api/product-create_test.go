@@ -16,7 +16,7 @@ func TestCreateProduct_Successfully(t *testing.T) {
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestCreateProduct_Successfully",
 		Request: call.Request{
-			URL:    "http://localhost:8080/products",
+			URL:    "http://localhost:8080/api/v1/products",
 			Method: http.MethodPost,
 			Body: `{
 				"name": "product test",

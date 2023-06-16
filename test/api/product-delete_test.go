@@ -21,7 +21,7 @@ func TestDeleteProduct_Successfully(t *testing.T) {
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestGetAllProduct_Successfully",
 		Request: call.Request{
-			URL:    fmt.Sprintf("http://localhost:8080/products/%d", id),
+			URL:    fmt.Sprintf("http://localhost:8080/api/v1/products/%d", id),
 			Method: http.MethodDelete,
 		},
 		Response: expect.Response{

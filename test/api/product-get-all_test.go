@@ -15,7 +15,7 @@ func TestGetAllProduct_Successfully(t *testing.T) {
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestGetAllProduct_Successfully",
 		Request: call.Request{
-			URL:    "http://localhost:8080/products",
+			URL:    "http://localhost:8080/api/v1/products/all",
 			Method: http.MethodGet,
 		},
 		Response: expect.Response{

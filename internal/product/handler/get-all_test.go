@@ -27,7 +27,7 @@ func TestHandleGetAll(t *testing.T) {
 		GetAll().
 		Return(products, nil)
 
-	h, _ := NewHandler(service)
+	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)
@@ -61,7 +61,7 @@ func TestHandleGetAllDBFailed(t *testing.T) {
 		GetAll().
 		Return(nil, errors.New(""))
 
-	h, _ := NewHandler(service)
+	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(h.HandleGetAll)

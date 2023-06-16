@@ -32,3 +32,15 @@ func (r *Repository) GetByID(id uint) (*entity.Product, error) {
 
 	return product, nil
 }
+
+// gets products paginated from the database
+// cursor is the last id from the previous page
+func (r *Repository) GetPaginated(cursor uint, limit uint) ([]*entity.Product, error) {
+	products := []*entity.Product{}
+	result := r.dbClient.Where("id > ?", int(cursor)).Limit(int(limit)).Find(&products)
+	if result.Error != nil {
+		return nil, errors.Wrap(result.Error, "failed to get products paginated")
+	}
+
+	return products, nil
+}

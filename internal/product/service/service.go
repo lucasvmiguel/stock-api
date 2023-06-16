@@ -21,6 +21,7 @@ type Repository interface {
 	Create(product entity.Product) (*entity.Product, error)
 	GetAll() ([]*entity.Product, error)
 	GetByID(id uint) (*entity.Product, error)
+	GetPaginated(cursor uint, limit uint) ([]*entity.Product, error)
 	UpdateByID(id uint, product entity.Product) (*entity.Product, error)
 	DeleteByID(id uint) (*entity.Product, error)
 }

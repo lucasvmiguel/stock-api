@@ -44,10 +44,30 @@ make test-unit
 $ make persistence-up
 ```
 
-2. In another terminal, start the application with the following command:
+2. In another terminal, run the integration test with the following command:
 
 ```bash
 $ make test-integration
+```
+
+### Stress test
+
+1. Open a terminal and run the following command to start the persistence (database) required:
+
+```bash
+$ make persistence-up
+```
+
+2. In a new terminal, start the application with the following command:
+
+```bash
+$ make run
+```
+
+3. In another terminal, run the stress test with the following command
+
+```bash
+$ make test-stress
 ```
 
 ## Configuration
@@ -100,7 +120,7 @@ Endpoint that creates a product
 #### Request
 
 ```
-Endpoint: [POST] /products
+Endpoint: [POST] /api/v1/products
 
 Headers:
   Content-Type: application/json
@@ -145,14 +165,64 @@ Status: 500
 </details>
 
 <details>
+<summary>Get products paginated</summary>
+
+Endpoint to get products paginated
+
+#### Request
+
+##### Query Parameters
+
+- `cursor`: use the response's `next_cursor` field
+- `limit`: limit of products to be returned (min=1, max=100)
+
+```
+Endpoint: [GET] /api/v1/products?limit=10&cursor=2
+
+Headers:
+  Content-Type: application/json
+```
+
+#### Response
+
+**Success**
+
+```
+Status: 200
+
+Body:
+  {
+    "items": [
+      {
+        "id": 1,
+        "name": "foo",
+        "code": "70a17d32-a670-4396-9706-bd0940152fc7",
+        "stock_quantity": 1,
+        "created_at": "2022-07-08T18:53:57.936433+01:00",
+        "updated_at": "2022-07-08T18:53:57.936433+01:00"
+      }
+    ],
+    "next_cursor": 2
+  }
+```
+
+**Internal Server Error**
+
+```
+Status: 500
+```
+
+</details>
+
+<details>
 <summary>Get all products</summary>
 
-Endpoint to get all products
+Endpoint to get all products (does not have pagination)
 
 #### Request
 
 ```
-Endpoint: [GET] /products
+Endpoint: [GET] /api/v1/products/all
 
 Headers:
   Content-Type: application/json
@@ -194,7 +264,7 @@ Endpoint to get a product by id
 #### Request
 
 ```
-Endpoint: [GET] /products/{id}
+Endpoint: [GET] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -240,7 +310,7 @@ Endpoint that updates a product by id
 #### Request
 
 ```
-Endpoint: [PUT] /products/{id}
+Endpoint: [PUT] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -298,7 +368,7 @@ Endpoint to delete a product by id
 #### Request
 
 ```
-Endpoint: [DELETE] /products/{id}
+Endpoint: [DELETE] /api/v1/products/{id}
 
 Headers:
   Content-Type: application/json
@@ -353,7 +423,8 @@ Steps:
 
 ## Roadmap
 
-- If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
-- API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
-- Pagination is a must when dealing with so much data. So, before deploying this application to production, it's probably a good idea to modify the get all products endpoint to return products paginated.
+- Improvement: If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
+- Improvement: API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
+- Improvement: Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
+- Improvement: [starter.go](cmd/api/starter/starter.go) file to scale to more entities, not just product
+- Improvement: Response body should not depend on the service return struct

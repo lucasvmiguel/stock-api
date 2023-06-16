@@ -24,7 +24,7 @@ var (
 		UpdatedAt:     fakeTime,
 	}
 
-	reqBody, _ = json.Marshal(map[string]interface{}{
+	reqBody, _ = json.Marshal(map[string]any{
 		"name":           fakeProduct.Name,
 		"stock_quantity": fakeProduct.StockQuantity,
 	})
@@ -34,14 +34,14 @@ func TestNewHandler(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
 
-	_, err := NewHandler(service)
+	_, err := NewHandler(NewHandlerArgs{Service: service})
 	if err != nil {
 		t.Error("should not return error when service is not nil")
 	}
 }
 
 func TestNewHandlerError(t *testing.T) {
-	_, err := NewHandler(nil)
+	_, err := NewHandler(NewHandlerArgs{})
 	if err == nil {
 		t.Error("error should be returned when no service is passed")
 	}
