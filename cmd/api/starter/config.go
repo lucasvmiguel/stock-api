@@ -10,6 +10,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/pkg/env"
 )
 
+// config is a struct that holds all config related info
 type config struct {
 	DBPort                 string
 	DBHost                 string
@@ -21,6 +22,7 @@ type config struct {
 	PaginationDefaultLimit int
 }
 
+// loads configuration from the environment variables
 func loadConfig() (config, error) {
 	paginationDefaultLimitStr := os.Getenv("PAGINATION_DEFAULT_LIMIT")
 	paginationDefaultLimit, err := strconv.Atoi(paginationDefaultLimitStr)

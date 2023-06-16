@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-chi/chi/v5"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,10 +16,10 @@ import (
 type Starter struct {
 	DB *sql.DB
 
-	config config
 	gormDB *gorm.DB
 	router *chi.Mux
 
+	config       config
 	repositories repositories
 	services     services
 	handlers     handlers
@@ -53,7 +52,6 @@ func (s *Starter) Start() {
 	if err != nil {
 		cmd.ExitWithError("failed to connect database", err)
 	}
-	spew.Dump(s.gormDB)
 
 	// migrates the database
 	s.gormDB.AutoMigrate(&entity.Product{})
