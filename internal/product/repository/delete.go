@@ -7,7 +7,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
-// delete a product by id from the database
+// deletes a product by id from the database
 func (r *Repository) DeleteByID(id uint) (*entity.Product, error) {
 	product := &entity.Product{}
 	result := r.dbClient.First(product, id)

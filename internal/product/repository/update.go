@@ -7,7 +7,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
-// update a product by id from the database
+// updates a product by id from the database
 func (r *Repository) UpdateByID(id uint, product entity.Product) (*entity.Product, error) {
 	p := &entity.Product{}
 	result := r.dbClient.First(p, id)

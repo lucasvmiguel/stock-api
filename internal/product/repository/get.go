@@ -18,7 +18,7 @@ func (r *Repository) GetAll() ([]*entity.Product, error) {
 	return products, nil
 }
 
-// get a product by id from the database
+// gets a product by id from the database
 func (r *Repository) GetByID(id uint) (*entity.Product, error) {
 	product := &entity.Product{}
 	result := r.dbClient.First(&product, id)

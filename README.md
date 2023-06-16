@@ -4,9 +4,7 @@
 
 ## Description
 
-A Stock API is a REST API written in Golang where products (with stock) can be created, read, updated and deleted.
-
-To modify a product's stock, you will have to update the `stock_quantity` field.
+A Stock API is a REST API written in Go where products can be created, read, updated and deleted.
 
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
@@ -73,7 +71,7 @@ $ make test-integration
 - `/cmd`: Main applications for this project.
 - `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
-- `/pkg`: Library code that's ok to use by external applications (e.g., /pkg/mypubliclib).
+- `/pkg`: Library code that's ok to use by external applications (eg: `/pkg/mypubliclib`).
 - `/test`: Integration tests that run with external apps. (eg: database)
 - `/.github`: CI/CD from Github.
 - `docker-compose.yml`: Used to spin up the persistence layer in development and testing.
