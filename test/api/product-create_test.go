@@ -19,16 +19,16 @@ func TestCreateProduct_Successfully(t *testing.T) {
 			URL:    "http://localhost:8080/api/v1/products",
 			Method: http.MethodPost,
 			Body: `{
-				"name": "product test",
-				"stock_quantity": 5
+				"name": "nintendo wii",
+				"stock_quantity": 6
 			}`,
 		},
 		Response: expect.Response{
 			StatusCode: http.StatusCreated,
 			Body: `{
-				"id": 3,
-				"name":"product test",
-				"stock_quantity":5,
+				"id": 6,
+				"name": "nintendo wii",
+				"stock_quantity": 6,
 				"code": "<<PRESENCE>>",
 				"created_at": "<<PRESENCE>>",
 				"updated_at": "<<PRESENCE>>"
@@ -43,7 +43,7 @@ func TestCreateProduct_Successfully(t *testing.T) {
 					`,
 				},
 				Result: expect.Result{
-					{"name": "product test", "stock_quantity": 5},
+					{"name": "nintendo wii", "stock_quantity": 6},
 				},
 			},
 		},

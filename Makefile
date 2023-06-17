@@ -2,7 +2,7 @@ PORT:=8080
 REGISTRY:=github.com/lucasvmiguel
 API_IMAGE:=stock-api
 VERSION:=latest
-LOCAL_URL:=http://localhost:8080
+LOCAL_URL:=http://localhost:$(PORT)
 
 test-unit: generate-mocks
 	ENV=TEST go test -cover $(shell go list ./... | grep -v test)

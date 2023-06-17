@@ -22,7 +22,7 @@ func TestGetByIDProduct_Successfully(t *testing.T) {
 			StatusCode: http.StatusOK,
 			Body: `{
 				"id": 1,
-				"name":"foo",
+				"name":"xbox series x",
 				"stock_quantity":1,
 				"code": "b0553885-7d5b-4c9d-9ada-000000000001",
 				"created_at": "<<PRESENCE>>",

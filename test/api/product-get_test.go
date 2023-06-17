@@ -10,7 +10,7 @@ import (
 )
 
 func TestGet_Successfully(t *testing.T) {
-	reloadWithMoreRows()
+	reload()
 
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestGet_Successfully page 1",
@@ -24,7 +24,7 @@ func TestGet_Successfully(t *testing.T) {
 				"items": [
 					{
 						"id": 1,
-						"name": "foo 1",
+						"name": "xbox series x",
 						"code": "b0553885-7d5b-4c9d-9ada-000000000001",
 						"stock_quantity": 1,
 						"created_at": "<<PRESENCE>>",
@@ -32,7 +32,7 @@ func TestGet_Successfully(t *testing.T) {
 					},
 					{
 						"id": 2,
-						"name": "foo 2",
+						"name": "playstation 5",
 						"code": "b0553885-7d5b-4c9d-9ada-000000000002",
 						"stock_quantity": 2,
 						"created_at": "<<PRESENCE>>",
@@ -60,7 +60,7 @@ func TestGet_Successfully(t *testing.T) {
 				"items": [
 					{
 						"id": 3,
-						"name": "foo 3",
+						"name": "nintendo switch",
 						"code": "b0553885-7d5b-4c9d-9ada-000000000003",
 						"stock_quantity": 3,
 						"created_at": "<<PRESENCE>>",
@@ -68,7 +68,7 @@ func TestGet_Successfully(t *testing.T) {
 					},
 					{
 						"id": 4,
-						"name": "foo 4",
+						"name": "xbox series s",
 						"code": "b0553885-7d5b-4c9d-9ada-000000000004",
 						"stock_quantity": 4,
 						"created_at": "<<PRESENCE>>",
@@ -96,7 +96,7 @@ func TestGet_Successfully(t *testing.T) {
 				"items": [
 					{
 						"id": 5,
-						"name": "foo 5",
+						"name": "steam deck",
 						"code": "b0553885-7d5b-4c9d-9ada-000000000005",
 						"stock_quantity": 5,
 						"created_at": "<<PRESENCE>>",

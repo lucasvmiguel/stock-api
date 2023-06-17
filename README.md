@@ -89,8 +89,8 @@ $ make test-stress
 ### Folder/File structure
 
 - `/cmd`: Main applications for this project.
-- `/cmd/api`: Package responsible for starting the application.
-- `/cmd/api/starter`: Package containing all code required for starting the application. (eg: config, routes, etc)
+- `/cmd/api`: Package responsible for starting the API application.
+- `/cmd/api/starter`: Package containing all code required for starting the API application. (eg: config, routes, etc)
 - `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
 - `/pkg`: Library code that's ok to use by external applications (eg: `/pkg/mypubliclib`).

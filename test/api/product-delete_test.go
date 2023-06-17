@@ -27,11 +27,14 @@ func TestDeleteProduct_Successfully(t *testing.T) {
 				DB: DB,
 				Query: call.Query{
 					Statement: `
-					SELECT name, stock_quantity FROM products WHERE deleted_at IS NULL
+					SELECT name, stock_quantity, code FROM products WHERE deleted_at IS NULL
 					`,
 				},
 				Result: expect.Result{
-					{"name": "bar", "stock_quantity": 2},
+					{"name": "playstation 5", "stock_quantity": 2, "code": "b0553885-7d5b-4c9d-9ada-000000000002"},
+					{"name": "nintendo switch", "stock_quantity": 3, "code": "b0553885-7d5b-4c9d-9ada-000000000003"},
+					{"name": "xbox series s", "stock_quantity": 4, "code": "b0553885-7d5b-4c9d-9ada-000000000004"},
+					{"name": "steam deck", "stock_quantity": 5, "code": "b0553885-7d5b-4c9d-9ada-000000000005"},
 				},
 			},
 		},

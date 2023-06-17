@@ -20,6 +20,9 @@ type Starter struct {
 	DB *sql.DB
 
 	// config is the application config
+	// it is used everywhere in this package
+	// therefore, it is not passed as an argument
+	// but as a struct field of Starter
 	config config
 }
 

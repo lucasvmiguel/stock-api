@@ -19,7 +19,7 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 			URL:    "http://localhost:8080/api/v1/products/1",
 			Method: http.MethodPut,
 			Body: `{
-				"name": "foo",
+				"name": "nintendo 64",
 				"stock_quantity": 10
 			}`,
 		},
@@ -27,7 +27,7 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 			StatusCode: http.StatusOK,
 			Body: `{
 				"id": 1,
-				"name":"foo",
+				"name":"nintendo 64",
 				"stock_quantity":10,
 				"code": "b0553885-7d5b-4c9d-9ada-000000000001",
 				"created_at": "<<PRESENCE>>",
@@ -43,7 +43,7 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 					`,
 				},
 				Result: expect.Result{
-					{"name": "foo", "stock_quantity": 10},
+					{"name": "nintendo 64", "stock_quantity": 10},
 				},
 			},
 		},
