@@ -17,6 +17,7 @@ import (
 // Starter is the struct that holds all dependencies
 type Starter struct {
 	// DB is the sql database
+	// the database is exported to facilitate integration testing
 	DB *sql.DB
 
 	// config is the application config
