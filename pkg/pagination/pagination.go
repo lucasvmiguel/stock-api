@@ -1,3 +1,4 @@
+// pagination is a package responsible for paginating
 package pagination
 
 // Result is the result of a paginated query

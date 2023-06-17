@@ -1,3 +1,4 @@
+// starter package is responsible for starting the application
 package starter
 
 import (
@@ -9,33 +10,36 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
-	"github.com/lucasvmiguel/stock-api/pkg/cmd"
 	"github.com/lucasvmiguel/stock-api/pkg/http/server"
+	"github.com/lucasvmiguel/stock-api/pkg/logger"
 )
 
+// Starter is the struct that holds all dependencies
 type Starter struct {
+	// DB is the sql database
+	// the database is exported to facilitate integration testing
 	DB *sql.DB
 
-	gormDB *gorm.DB
-	router *chi.Mux
-
-	config       config
-	repositories repositories
-	services     services
-	handlers     handlers
+	// config is the application config
+	// it is used everywhere in this package
+	// therefore, it is not passed as an argument
+	// but as a struct field of Starter
+	config config
 }
 
+// New creates a new Starter
 func New() *Starter {
 	return &Starter{}
 }
 
+// Start starts the application
 func (s *Starter) Start() {
 	var err error
 
 	// loads config
 	s.config, err = loadConfig()
 	if err != nil {
-		cmd.ExitWithError("failed to load config", err)
+		logger.Fatal("failed to load config", err)
 	}
 
 	// creates dsn string
@@ -48,42 +52,42 @@ func (s *Starter) Start() {
 	)
 
 	// starts connection with database
-	s.gormDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		cmd.ExitWithError("failed to connect database", err)
+		logger.Fatal("failed to connect database", err)
 	}
 
 	// migrates the database
-	s.gormDB.AutoMigrate(&entity.Product{})
+	gormDB.AutoMigrate(&entity.Product{})
 
 	// adds sql DB to starter struct
-	s.DB, err = s.gormDB.DB()
+	s.DB, err = gormDB.DB()
 	if err != nil {
-		cmd.ExitWithError("failed to return sql DB", err)
+		logger.Fatal("failed to return sql DB", err)
 	}
 
 	// creates repositories
-	s.repositories, err = s.createRepositories()
+	repositories, err := s.createRepositories(createRepositoriesArgs{gormDB: gormDB})
 	if err != nil {
-		cmd.ExitWithError("failed to create repositories", err)
+		logger.Fatal("failed to create repositories", err)
 	}
 
 	// creates services
-	s.services, err = s.createServices()
+	services, err := s.createServices(createServicesArgs{repositories: repositories})
 	if err != nil {
-		cmd.ExitWithError("failed to create services", err)
+		logger.Fatal("failed to create services", err)
 	}
 
 	// creates handlers
-	s.handlers, err = s.createHandlers()
+	handlers, err := s.createHandlers(createHandlersArgs{services: services})
 	if err != nil {
-		cmd.ExitWithError("failed to create handlers", err)
+		logger.Fatal("failed to create handlers", err)
 	}
 
 	// creates routes
-	s.router = chi.NewRouter()
-	s.createRoutes()
+	router := chi.NewRouter()
+	s.createRoutes(createRoutesArgs{router: router, handlers: handlers})
 
 	// start http server
-	server.Serve(s.config.Port, s.router)
+	server.Serve(s.config.Port, router)
 }

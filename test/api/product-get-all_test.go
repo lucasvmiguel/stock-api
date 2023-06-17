@@ -22,18 +22,42 @@ func TestGetAllProduct_Successfully(t *testing.T) {
 			StatusCode: http.StatusOK,
 			Body: `[
 				{
-					"id": "<<PRESENCE>>",
-					"name": "foo",
-					"code": "<<PRESENCE>>",
+					"id": 1,
+					"name": "xbox series x",
+					"code": "b0553885-7d5b-4c9d-9ada-000000000001",
 					"stock_quantity": 1,
 					"created_at": "<<PRESENCE>>",
 					"updated_at": "<<PRESENCE>>"
 				},
 				{
-					"id": "<<PRESENCE>>",
-					"name": "bar",
-					"code": "<<PRESENCE>>",
+					"id": 2,
+					"name": "playstation 5",
+					"code": "b0553885-7d5b-4c9d-9ada-000000000002",
 					"stock_quantity": 2,
+					"created_at": "<<PRESENCE>>",
+					"updated_at": "<<PRESENCE>>"
+				},
+				{
+					"id": 3,
+					"name": "nintendo switch",
+					"code": "b0553885-7d5b-4c9d-9ada-000000000003",
+					"stock_quantity": 3,
+					"created_at": "<<PRESENCE>>",
+					"updated_at": "<<PRESENCE>>"
+				},
+				{
+					"id": 4,
+					"name": "xbox series s",
+					"code": "b0553885-7d5b-4c9d-9ada-000000000004",
+					"stock_quantity": 4,
+					"created_at": "<<PRESENCE>>",
+					"updated_at": "<<PRESENCE>>"
+				},
+				{
+					"id": 5,
+					"name": "steam deck",
+					"code": "b0553885-7d5b-4c9d-9ada-000000000005",
+					"stock_quantity": 5,
 					"created_at": "<<PRESENCE>>",
 					"updated_at": "<<PRESENCE>>"
 				}

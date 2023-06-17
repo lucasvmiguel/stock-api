@@ -9,10 +9,15 @@ type handlers struct {
 	product *productHandler.Handler
 }
 
+// createHandlersArgs is the arguments struct for createHandlers function
+type createHandlersArgs struct {
+	services services
+}
+
 // createHandlers creates all handlers
-func (s *Starter) createHandlers() (handlers, error) {
+func (s *Starter) createHandlers(args createHandlersArgs) (handlers, error) {
 	productHandler, err := productHandler.NewHandler(productHandler.NewHandlerArgs{
-		Service:                s.services.product,
+		Service:                args.services.product,
 		PaginationDefaultLimit: s.config.PaginationDefaultLimit,
 	})
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
+	"github.com/lucasvmiguel/stock-api/pkg/logger"
 	"github.com/lucasvmiguel/stock-api/pkg/pagination"
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
@@ -24,6 +25,8 @@ type getPaginatedResponseBody struct {
 
 // handles get all products via http request
 func (h *Handler) HandleGetPaginated(w http.ResponseWriter, req *http.Request) {
+	logger := logger.HTTPLogEntry(req)
+
 	paginatedQueryParams, err := h.buildGetPaginatedQueryParams(req)
 	if err != nil {
 		respond.HTTPError(w, http.StatusBadRequest, err)
@@ -38,6 +41,7 @@ func (h *Handler) HandleGetPaginated(w http.ResponseWriter, req *http.Request) {
 
 	result, err := h.service.GetPaginated(uint(paginatedQueryParams.Cursor), uint(paginatedQueryParams.Limit))
 	if err != nil {
+		logger.Err(err).Msg(ErrInternalServerError.Error())
 		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)
 		return
 	}

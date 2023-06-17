@@ -89,6 +89,8 @@ $ make test-stress
 ### Folder/File structure
 
 - `/cmd`: Main applications for this project.
+- `/cmd/api`: Package responsible for starting the API application.
+- `/cmd/api/starter`: Package containing all code required for starting the API application. (eg: config, routes, etc)
 - `/internal`: Private application and library code.
 - `/internal/product`: Product domain, where every code related to product should be placed. (Inspired by [DDD](https://en.wikipedia.org/wiki/Domain-driven_design))
 - `/pkg`: Library code that's ok to use by external applications (eg: `/pkg/mypubliclib`).
@@ -423,6 +425,6 @@ Steps:
 
 ## Roadmap
 
-- Improvement: If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
-- Improvement: API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
-- Improvement: Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
+- `Improvement`: If it's needed to add more entities (eg: [Product](internal/product/entity/product.go)), we might need to centralize all entities in just one package. (Something like a `entity` package) That way, we would prevent cycle dependencies. (Check [this link](https://www.reddit.com/r/golang/comments/vcy5xq/ddd_file_structure_cyclic_dependencies/))
+- `Improvement`: API docs are being described on the Readme. However, [OpenAPI](https://swagger.io/specification/) might be a good improvement in the future.
+- `Improvement`: Using a secret management service like [Doppler](https://www.doppler.com/) or [Vault](https://www.vaultproject.io/)
