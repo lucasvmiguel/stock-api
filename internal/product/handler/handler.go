@@ -1,3 +1,4 @@
+// handler package is responsible to handle http requests of the product domain
 package handler
 
 import (

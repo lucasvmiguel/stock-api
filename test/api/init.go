@@ -44,9 +44,23 @@ func init() {
 	DB = s.DB
 }
 
-func reload() {
-	DB.Exec("DELETE FROM products")
+func deleteData() {
+	DB.Exec("TRUNCATE TABLE products RESTART IDENTITY;")
+}
 
-	DB.Exec("INSERT INTO products (name, stock_quantity) VALUES ('foo', 1);")
-	DB.Exec("INSERT INTO products (name, stock_quantity) VALUES ('bar', 2);")
+func reload() {
+	deleteData()
+
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo', 1, 'b0553885-7d5b-4c9d-9ada-000000000001');")
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('bar', 2, 'b0553885-7d5b-4c9d-9ada-000000000002');")
+}
+
+func reloadWithMoreRows() {
+	deleteData()
+
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo 1', 1, 'b0553885-7d5b-4c9d-9ada-000000000001');")
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo 2', 2, 'b0553885-7d5b-4c9d-9ada-000000000002');")
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo 3', 3, 'b0553885-7d5b-4c9d-9ada-000000000003');")
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo 4', 4, 'b0553885-7d5b-4c9d-9ada-000000000004');")
+	DB.Exec("INSERT INTO products (name, stock_quantity, code) VALUES ('foo 5', 5, 'b0553885-7d5b-4c9d-9ada-000000000005');")
 }

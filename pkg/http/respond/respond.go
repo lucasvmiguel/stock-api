@@ -2,7 +2,6 @@ package respond
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -32,8 +31,6 @@ func HTTP(resp Response) {
 // helper function that respond an HTTP error in json format
 func HTTPError(w http.ResponseWriter, statusCode int, err error) {
 	w.Header().Set(contentTypeKey, contentTypeValue)
-
-	log.Println(err)
 
 	w.WriteHeader(statusCode)
 	json.NewEncoder(w).Encode(errorBody{Message: err.Error()})

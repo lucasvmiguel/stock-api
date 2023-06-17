@@ -1,3 +1,4 @@
+// repository package is responsible for the data access layer of the product domain
 package repository
 
 import (

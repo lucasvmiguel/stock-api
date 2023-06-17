@@ -1,3 +1,4 @@
+// service package is responsible for the business logic of the product domain
 package service
 
 import (

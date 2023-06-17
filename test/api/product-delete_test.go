@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -14,14 +13,10 @@ import (
 func TestDeleteProduct_Successfully(t *testing.T) {
 	reload()
 
-	var id int
-	row := DB.QueryRow("SELECT id FROM products LIMIT 1")
-	row.Scan(&id)
-
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestGetAllProduct_Successfully",
 		Request: call.Request{
-			URL:    fmt.Sprintf("http://localhost:8080/api/v1/products/%d", id),
+			URL:    "http://localhost:8080/api/v1/products/1",
 			Method: http.MethodDelete,
 		},
 		Response: expect.Response{

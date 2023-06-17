@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -14,14 +13,10 @@ import (
 func TestUpdateProduct_Successfully(t *testing.T) {
 	reload()
 
-	var id int
-	row := DB.QueryRow("SELECT id FROM products ORDER BY id LIMIT 1")
-	row.Scan(&id)
-
 	err := integration.Test(&integration.HTTPTestCase{
 		Description: "TestCreateProduct_Successfully",
 		Request: call.Request{
-			URL:    fmt.Sprintf("http://localhost:8080/api/v1/products/%d", id),
+			URL:    "http://localhost:8080/api/v1/products/1",
 			Method: http.MethodPut,
 			Body: `{
 				"name": "foo",
@@ -31,10 +26,10 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 		Response: expect.Response{
 			StatusCode: http.StatusOK,
 			Body: `{
-				"id": "<<PRESENCE>>",
+				"id": 1,
 				"name":"foo",
 				"stock_quantity":10,
-				"code": "<<PRESENCE>>",
+				"code": "b0553885-7d5b-4c9d-9ada-000000000001",
 				"created_at": "<<PRESENCE>>",
 				"updated_at": "<<PRESENCE>>"
 			}`,

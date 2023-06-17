@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
+
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/lucasvmiguel/stock-api/pkg/logger"
 )
 
 const (
@@ -32,19 +33,21 @@ func Serve(port string, router *chi.Mux) {
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			logger.Fatal("listen", err)
 		}
 	}()
-	log.Printf("HTTP server on %s", fmt.Sprintf("http://%s", srv.Addr))
+
+	logger.Infof("HTTP server on %s", fmt.Sprintf("http://%s", srv.Addr))
 
 	<-done
-	log.Print("HTTP server stopped")
+
+	logger.Info("HTTP server stopped")
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer func() { cancel() }()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("HTTP server shutdown failed: %+v", err)
+		logger.Fatal("HTTP server shutdown failed", err)
 	}
-	log.Print("HTTP server exited properly")
+	logger.Info("HTTP server exited properly")
 }

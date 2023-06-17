@@ -20,6 +20,7 @@ type config struct {
 	Port                   string
 	ENV                    env.Environment
 	PaginationDefaultLimit int
+	ServiceName            string
 }
 
 // loads configuration from the environment variables
@@ -39,5 +40,6 @@ func loadConfig() (config, error) {
 		DBPort:                 os.Getenv("DB_PORT"),
 		ENV:                    env.Environment(os.Getenv("ENV")),
 		PaginationDefaultLimit: paginationDefaultLimit,
+		ServiceName:            os.Getenv("SERVICE_NAME"),
 	}, nil
 }

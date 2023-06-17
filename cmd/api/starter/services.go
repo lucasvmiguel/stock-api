@@ -9,9 +9,14 @@ type services struct {
 	product *productService.Service
 }
 
+// createServicesArgs is the arguments struct for createServices function
+type createServicesArgs struct {
+	repositories repositories
+}
+
 // createServices creates all services
-func (s *Starter) createServices() (services, error) {
-	productSvc, err := productService.NewService(s.repositories.product)
+func (s *Starter) createServices(args createServicesArgs) (services, error) {
+	productSvc, err := productService.NewService(args.repositories.product)
 	if err != nil {
 		return services{}, err
 	}

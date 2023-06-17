@@ -1,3 +1,4 @@
+// parser package contains functions for converting types
 package parser
 
 import (

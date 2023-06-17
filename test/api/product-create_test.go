@@ -26,7 +26,7 @@ func TestCreateProduct_Successfully(t *testing.T) {
 		Response: expect.Response{
 			StatusCode: http.StatusCreated,
 			Body: `{
-				"id": "<<PRESENCE>>",
+				"id": 3,
 				"name":"product test",
 				"stock_quantity":5,
 				"code": "<<PRESENCE>>",

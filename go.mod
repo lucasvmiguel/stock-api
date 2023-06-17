@@ -12,6 +12,10 @@ require (
 	github.com/pkg/errors v0.9.1
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.1
+	github.com/go-chi/httplog v0.3.0 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/rs/zerolog v1.27.0 // indirect
 )
 
 require (

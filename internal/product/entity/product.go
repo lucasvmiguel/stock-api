@@ -1,3 +1,4 @@
+// entity package is a package that contains the entities of the domain product
 package entity
 
 import (
