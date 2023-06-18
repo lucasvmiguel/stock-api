@@ -43,7 +43,7 @@ func TestHandleGetByID(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected, _ := json.Marshal(fakeProduct)
+	expected, _ := json.Marshal(fakeProductResponseBody)
 	expectedString := strings.TrimSpace(string(expected))
 	result := strings.TrimSpace(rr.Body.String())
 	if result != expectedString {

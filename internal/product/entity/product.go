@@ -10,13 +10,13 @@ import (
 
 // product entity
 type Product struct {
-	ID            uint           `gorm:"primaryKey" json:"id"`
-	Name          string         `json:"name"`
-	Code          uuid.UUID      `gorm:"uniqueIndex" json:"code"`
-	StockQuantity int            `gorm:"default:0" json:"stock_quantity"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
+	ID            uint `gorm:"primaryKey"`
+	Name          string
+	Code          uuid.UUID `gorm:"uniqueIndex"`
+	StockQuantity int       `gorm:"default:0"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     gorm.DeletedAt `gorm:"index"`
 }
 
 // Gorm hook
