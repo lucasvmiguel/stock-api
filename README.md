@@ -77,11 +77,28 @@ $ make test-stress
 
 ## Architecture
 
+This section describes what are the goals of the system and some of its design and implementation.
+
+### Requirements
+
+The following list shows all user requirements implemented by the system.
+
+- As a user, I can fetch all products using a REST API.
+- As a user, I can fetch a paginated list of products using a REST API.
+- As a user, I can fetch a product by its id using a REST API.
+- As a user, I can create a product using a REST API.
+- As a user, I can update some fields (`name` and/or `code`) of a product by its id using a REST API.
+- As a user, I can delete a product by its id using a REST API.
+
 ### Schema
+
+The following picture shows all the entities of the system.
 
 ![schema](/docs/schema.png)
 
 ### System Design
+
+The following pictures shows some of the details of how the system is designed and implemented.
 
 ![system design](/docs/system-design.png)
 ![layers](/docs/layer.png)
