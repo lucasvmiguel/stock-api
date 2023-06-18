@@ -4,18 +4,18 @@ go 1.20
 
 require (
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/httplog v0.3.0 // indirect
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
 	github.com/lucasvmiguel/integration v1.0.6
-	github.com/pkg/errors v0.9.1
-	gorm.io/driver/postgres v1.5.2
-	gorm.io/gorm v1.25.1
-	github.com/go-chi/httplog v0.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.27.0 // indirect
+	gorm.io/driver/postgres v1.5.2
+	gorm.io/gorm v1.25.1
 )
 
 require (
@@ -52,4 +52,11 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/grpc v1.56.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
+)
+
+require (
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

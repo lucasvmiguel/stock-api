@@ -4,10 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
 	"github.com/lucasvmiguel/stock-api/pkg/logger"
-	"github.com/lucasvmiguel/stock-api/pkg/pagination"
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
 
@@ -15,12 +13,6 @@ import (
 type getPaginatedQueryParams struct {
 	Limit  int `validate:"numeric,min=1,max=100"`
 	Cursor int `validate:"numeric,min=0"`
-}
-
-// getPaginatedResponseBody is the response body for get paginated
-type getPaginatedResponseBody struct {
-	Items      []productResponseBody `json:"items"`
-	NextCursor *uint                 `json:"next_cursor"`
 }
 
 // handles get all products via http request
@@ -47,7 +39,7 @@ func (h *Handler) HandleGetPaginated(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       h.buildGetPaginatedResponseBody(result),
+		Body:       mapProductsToPaginatedResponseBody(result),
 		StatusCode: http.StatusOK,
 		Writer:     w,
 	})
@@ -77,17 +69,4 @@ func (h *Handler) buildGetPaginatedQueryParams(req *http.Request) (getPaginatedQ
 	}
 
 	return paginatedQueryParams, nil
-}
-
-func (h *Handler) buildGetPaginatedResponseBody(result *pagination.Result[*entity.Product]) getPaginatedResponseBody {
-	responseBody := getPaginatedResponseBody{
-		NextCursor: result.NextCursor,
-		Items:      []productResponseBody{},
-	}
-
-	for _, product := range result.Items {
-		responseBody.Items = append(responseBody.Items, h.buildProductResponseBody(product))
-	}
-
-	return responseBody
 }

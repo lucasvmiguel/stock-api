@@ -60,7 +60,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       h.buildProductResponseBody(product),
+		Body:       mapProductToResponseBody(product),
 		StatusCode: http.StatusOK,
 		Writer:     w,
 	})

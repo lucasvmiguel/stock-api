@@ -55,8 +55,8 @@ func TestHandleGetPaginated(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected, _ := json.Marshal(getPaginatedResponseBody{
-		Items:      []productResponseBody{h.buildProductResponseBody(fakeProduct)},
+	expected, _ := json.Marshal(paginatedProductsResponseBody{
+		Items:      []productResponseBody{mapProductToResponseBody(fakeProduct)},
 		NextCursor: &nextCursor,
 	})
 	expectedString := strings.TrimSpace(string(expected))
@@ -100,7 +100,7 @@ func TestHandleGetPaginatedEnd(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	expected, _ := json.Marshal(getPaginatedResponseBody{
+	expected, _ := json.Marshal(paginatedProductsResponseBody{
 		Items: []productResponseBody{},
 	})
 	expectedString := strings.TrimSpace(string(expected))

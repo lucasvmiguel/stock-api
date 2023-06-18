@@ -47,7 +47,7 @@ func (h *Handler) HandleCreate(w http.ResponseWriter, req *http.Request) {
 	}
 
 	respond.HTTP(respond.Response{
-		Body:       h.buildProductResponseBody(product),
+		Body:       mapProductToResponseBody(product),
 		StatusCode: http.StatusCreated,
 		Writer:     w,
 	})

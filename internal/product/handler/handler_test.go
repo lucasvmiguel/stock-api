@@ -24,6 +24,15 @@ var (
 		UpdatedAt:     fakeTime,
 	}
 
+	fakeProductResponseBody = productResponseBody{
+		ID:            fakeProduct.ID,
+		Code:          fakeProduct.Code,
+		Name:          fakeProduct.Name,
+		StockQuantity: fakeProduct.StockQuantity,
+		CreatedAt:     fakeProduct.CreatedAt,
+		UpdatedAt:     fakeProduct.UpdatedAt,
+	}
+
 	reqBody, _ = json.Marshal(map[string]any{
 		"name":           fakeProduct.Name,
 		"stock_quantity": fakeProduct.StockQuantity,
