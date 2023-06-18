@@ -19,10 +19,10 @@ type productResponseBody struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
-// productsResponseBody is the response body for get all products
+// productsResponseBody is the response body for a list of products
 type productsResponseBody []productResponseBody
 
-// paginatedProductsResponseBody is the response body for get paginated
+// paginatedProductsResponseBody is the response body for a paginated list of products
 type paginatedProductsResponseBody struct {
 	Items      []productResponseBody `json:"items"`
 	NextCursor *uint                 `json:"next_cursor"`
@@ -40,7 +40,7 @@ func mapProductToResponseBody(product *entity.Product) productResponseBody {
 	}
 }
 
-// maps a list of product entities to a products response body
+// maps a list of product entities to products response body
 func mapProductsToResponseBody(products []*entity.Product) productsResponseBody {
 	response := productsResponseBody{}
 
@@ -51,7 +51,7 @@ func mapProductsToResponseBody(products []*entity.Product) productsResponseBody 
 	return response
 }
 
-// maps a list of product entities to a paginated products response body
+// maps a list of product entities to paginated products response body
 func mapProductsToPaginatedResponseBody(result *pagination.Result[*entity.Product]) paginatedProductsResponseBody {
 	responseBody := paginatedProductsResponseBody{
 		NextCursor: result.NextCursor,
