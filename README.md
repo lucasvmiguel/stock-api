@@ -19,13 +19,13 @@ Note: _This API has been configured for `development` environment. To use in a `
 1. Open a terminal and run the following command to start the persistence (database) required:
 
 ```bash
-$ make persistence-up
+make persistence-up
 ```
 
 2. In another terminal, start the application with the following command:
 
 ```bash
-$ make run
+make run
 ```
 
 ## Testing
@@ -41,33 +41,37 @@ make test-unit
 1. Open a terminal and run the following command to start the persistence (database) required:
 
 ```bash
-$ make persistence-up
+make persistence-up
 ```
 
 2. In another terminal, run the integration test with the following command:
 
 ```bash
-$ make test-integration
+make test-integration
 ```
 
 ### Stress test
 
+**Requirements:**
+
+- [Apache AB](https://httpd.apache.org/docs/2.4/programs/ab.html)
+
 1. Open a terminal and run the following command to start the persistence (database) required:
 
 ```bash
-$ make persistence-up
+make persistence-up
 ```
 
 2. In a new terminal, start the application with the following command:
 
 ```bash
-$ make run
+make run
 ```
 
 3. In another terminal, run the stress test with the following command
 
 ```bash
-$ make test-stress
+make test-stress
 ```
 
 ## Configuration
