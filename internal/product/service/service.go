@@ -2,36 +2,53 @@
 package service
 
 import (
+	"context"
 	"errors"
 
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 )
 
-var (
-	// error when repository is nil
-	ErrNilRepository = errors.New("repository cannot be nil")
-)
-
 // product service that manages different features for a product
 type Service struct {
 	repository Repository
+	transactor Transactor
+}
+
+// Transactor is the interface that wraps the required transactor methods
+type Transactor interface {
+	Begin(ctx context.Context) context.Context
+	Rollback(ctx context.Context)
+	Commit(ctx context.Context)
 }
 
 // repository interface that can be implemented by any kind of storage
 type Repository interface {
-	Create(product entity.Product) (*entity.Product, error)
-	GetAll() ([]*entity.Product, error)
-	GetByID(id uint) (*entity.Product, error)
-	GetPaginated(cursor uint, limit uint) ([]*entity.Product, error)
-	UpdateByID(id uint, product entity.Product) (*entity.Product, error)
-	DeleteByID(id uint) (*entity.Product, error)
+	Create(ctx context.Context, product entity.Product) (*entity.Product, error)
+	GetAll(ctx context.Context) ([]*entity.Product, error)
+	GetByID(ctx context.Context, id int) (*entity.Product, error)
+	GetPaginated(ctx context.Context, cursor int, limit int) ([]*entity.Product, error)
+	UpdateByID(ctx context.Context, id int, product entity.Product) (*entity.Product, error)
+	DeleteByID(ctx context.Context, id int) (*entity.Product, error)
+}
+
+// NewServiceArgs is the arguments struct for NewService function
+type NewServiceArgs struct {
+	Repository Repository
+	Transactor Transactor
 }
 
 // creates a new product service
-func NewService(repository Repository) (*Service, error) {
-	if repository == nil {
-		return nil, ErrNilRepository
+func NewService(args NewServiceArgs) (*Service, error) {
+	if args.Repository == nil {
+		return nil, errors.New("repository is required")
 	}
 
-	return &Service{repository}, nil
+	if args.Transactor == nil {
+		return nil, errors.New("transactor is required")
+	}
+
+	return &Service{
+		repository: args.Repository,
+		transactor: args.Transactor,
+	}, nil
 }

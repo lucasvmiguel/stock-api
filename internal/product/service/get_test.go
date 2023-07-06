@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -9,21 +10,25 @@ import (
 )
 
 const (
-	LIMIT  = uint(10)
-	CURSOR = uint(100)
+	LIMIT  = 10
+	CURSOR = 100
 )
 
 func TestGetByID_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetByID(gomock.Eq(fakeProduct.ID)).
+		GetByID(gomock.Any(), gomock.Eq(fakeProduct.ID)).
 		Return(fakeProduct, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.GetByID(fakeProduct.ID)
+	p, err := s.GetByID(context.Background(), fakeProduct.ID)
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -35,15 +40,19 @@ func TestGetByID_Successfully(t *testing.T) {
 
 func TestGetByID_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetByID(gomock.Eq(fakeProduct.ID)).
+		GetByID(gomock.Any(), gomock.Eq(fakeProduct.ID)).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.GetByID(fakeProduct.ID)
+	p, err := s.GetByID(context.Background(), fakeProduct.ID)
 	if err == nil {
 		t.Error("error should not be nil")
 	}
@@ -55,15 +64,19 @@ func TestGetByID_RepositoryWithError(t *testing.T) {
 
 func TestGetAll_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetAll().
+		GetAll(gomock.Any()).
 		Return([]*entity.Product{fakeProduct, fakeProduct}, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.GetAll()
+	p, err := s.GetAll(context.Background())
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -75,15 +88,19 @@ func TestGetAll_Successfully(t *testing.T) {
 
 func TestGetAll_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetAll().
+		GetAll(gomock.Any()).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.GetAll()
+	p, err := s.GetAll(context.Background())
 	if err == nil {
 		t.Error("error should not be nil")
 	}
@@ -95,15 +112,19 @@ func TestGetAll_RepositoryWithError(t *testing.T) {
 
 func TestGetPaginated_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetPaginated(gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
 		Return([]*entity.Product{fakeProduct, fakeProduct}, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	result, err := h.GetPaginated(CURSOR, LIMIT)
+	result, err := s.GetPaginated(context.Background(), CURSOR, LIMIT)
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -112,22 +133,26 @@ func TestGetPaginated_Successfully(t *testing.T) {
 		t.Error("2 products should be returned")
 	}
 
-	if result.NextCursor != &fakeProduct.ID {
+	if *result.NextCursor != fakeProduct.ID {
 		t.Error("next cursor should be last product id")
 	}
 }
 
 func TestGetPaginated_SuccessfullyButNoMoreProducts(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetPaginated(gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
 		Return([]*entity.Product{}, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	result, err := h.GetPaginated(CURSOR, LIMIT)
+	result, err := s.GetPaginated(context.Background(), CURSOR, LIMIT)
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -142,13 +167,17 @@ func TestGetPaginated_SuccessfullyButNoMoreProducts(t *testing.T) {
 }
 
 func TestGetPaginated_InvalidLimit(t *testing.T) {
-	limit := uint(10000)
+	limit := 10000
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	_, err := h.GetPaginated(CURSOR, limit)
+	_, err := s.GetPaginated(context.Background(), CURSOR, limit)
 	if err == nil {
 		t.Error("error should not be nil")
 	}
@@ -156,15 +185,19 @@ func TestGetPaginated_InvalidLimit(t *testing.T) {
 
 func TestGetPaginated_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		GetPaginated(gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	_, err := h.GetPaginated(CURSOR, LIMIT)
+	_, err := s.GetPaginated(context.Background(), CURSOR, LIMIT)
 	if err == nil {
 		t.Error("error should not be nil")
 	}

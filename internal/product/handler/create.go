@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -36,7 +37,7 @@ func (h *Handler) HandleCreate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.service.Create(entity.Product{
+	product, err := h.service.Create(context.Background(), entity.Product{
 		Name:          reqBody.Name,
 		StockQuantity: reqBody.StockQuantity,
 	})

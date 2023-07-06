@@ -12,6 +12,16 @@ services:
       - ${DB_PORT}:${DB_PORT}
     volumes:
       - postgres:/var/lib/postgresql/data
+  mqueue:
+    image: redis:7
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${MQUEUE_PORT}:${MQUEUE_PORT}
+    volumes: 
+      - mqueue:/data
 
 volumes:
   postgres:
+  mqueue:

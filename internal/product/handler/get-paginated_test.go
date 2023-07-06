@@ -17,8 +17,8 @@ import (
 )
 
 const (
-	LIMIT  = uint(10)
-	CURSOR = uint(100)
+	LIMIT  = 10
+	CURSOR = 100
 )
 
 func TestHandleGetPaginated(t *testing.T) {
@@ -27,7 +27,7 @@ func TestHandleGetPaginated(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	nextCursor := uint(110)
+	nextCursor := 110
 	productsPaginated := &pagination.Result[*entity.Product]{
 		Items:      []*entity.Product{fakeProduct},
 		NextCursor: &nextCursor,
@@ -37,7 +37,7 @@ func TestHandleGetPaginated(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetPaginated(gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
 		Return(productsPaginated, nil)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
@@ -82,7 +82,7 @@ func TestHandleGetPaginatedEnd(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetPaginated(gomock.Eq(uint(200)), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(200), gomock.Eq(LIMIT)).
 		Return(productsPaginated, nil)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
@@ -171,7 +171,7 @@ func TestHandleGetPaginated_FailedService(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetPaginated(gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
+		GetPaginated(gomock.Any(), gomock.Eq(CURSOR), gomock.Eq(LIMIT)).
 		Return(nil, errors.New("error"))
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})

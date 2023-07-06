@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -24,7 +23,7 @@ func TestHandleGetByID(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetByID(gomock.Eq(uint(1))).
+		GetByID(gomock.Any(), gomock.Eq(1)).
 		Return(fakeProduct, nil)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
@@ -62,11 +61,11 @@ func TestHandleGetByIDNotFound(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetByID(gomock.Eq(nonexistentID)).
+		GetByID(gomock.Any(), gomock.Eq(nonexistentID)).
 		Return(nil, nil)
 
 	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", strconv.FormatUint(uint64(nonexistentID), 10))
+	rctx.URLParams.Add("id", "0")
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, rctx))
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
@@ -92,7 +91,7 @@ func TestHandleGetByIDDBFailed(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetByID(gomock.Eq(uint(1))).
+		GetByID(gomock.Any(), gomock.Eq(1)).
 		Return(nil, errors.New(""))
 
 	rctx := chi.NewRouteContext()

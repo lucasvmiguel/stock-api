@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -11,18 +12,25 @@ import (
 
 func TestUpdateByID_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Commit(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+		UpdateByID(gomock.Any(), gomock.Eq(1), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
 		Return(fakeProduct, nil)
 
-	h, _ := NewService(repository)
+	h, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.UpdateByID(uint(1), entity.Product{
+	p, err := h.UpdateByID(context.Background(), 1, entity.Product{
 		Name:          fakeProduct.Name,
 		StockQuantity: fakeProduct.StockQuantity,
 	})
@@ -37,18 +45,24 @@ func TestUpdateByID_Successfully(t *testing.T) {
 
 func TestUpdateByID_NotFound(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Commit(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+		UpdateByID(gomock.Any(), gomock.Eq(1), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
 		Return(nil, nil)
 
-	h, _ := NewService(repository)
+	h, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.UpdateByID(uint(1), entity.Product{
+	p, err := h.UpdateByID(context.Background(), 1, entity.Product{
 		Name:          fakeProduct.Name,
 		StockQuantity: fakeProduct.StockQuantity,
 	})
@@ -63,18 +77,24 @@ func TestUpdateByID_NotFound(t *testing.T) {
 
 func TestUpdateByID_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Rollback(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		UpdateByID(gomock.Eq(uint(0)), gomock.Eq(entity.Product{
+		UpdateByID(gomock.Any(), gomock.Eq(0), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	h, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.UpdateByID(uint(0), entity.Product{
+	p, err := h.UpdateByID(context.Background(), 0, entity.Product{
 		Name:          fakeProduct.Name,
 		StockQuantity: fakeProduct.StockQuantity,
 	})

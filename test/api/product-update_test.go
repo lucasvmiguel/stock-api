@@ -14,7 +14,7 @@ func TestUpdateProduct_Successfully(t *testing.T) {
 	reload()
 
 	err := integration.Test(&integration.HTTPTestCase{
-		Description: "TestCreateProduct_Successfully",
+		Description: "TestUpdateProduct_Successfully",
 		Request: call.Request{
 			URL:    "http://localhost:8080/api/v1/products/1",
 			Method: http.MethodPut,

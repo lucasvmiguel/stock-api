@@ -25,7 +25,10 @@ var (
 func HTTP(resp Response) {
 	resp.Writer.Header().Set(contentTypeKey, contentTypeValue)
 	resp.Writer.WriteHeader(resp.StatusCode)
-	json.NewEncoder(resp.Writer).Encode(resp.Body)
+
+	if resp.Body != nil {
+		json.NewEncoder(resp.Writer).Encode(resp.Body)
+	}
 }
 
 // helper function that respond an HTTP error in json format

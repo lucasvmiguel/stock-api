@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
+	"strconv"
 
 	"net/http"
 
@@ -11,7 +13,6 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
 	"github.com/lucasvmiguel/stock-api/pkg/logger"
-	"github.com/lucasvmiguel/stock-api/pkg/parser"
 	"github.com/lucasvmiguel/stock-api/pkg/validator"
 )
 
@@ -25,7 +26,7 @@ type updateRequestBody struct {
 func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 	logger := logger.HTTPLogEntry(req)
 
-	id, err := parser.StringToUint(chi.URLParam(req, FieldID))
+	id, err := strconv.Atoi(chi.URLParam(req, FieldID))
 	if err != nil {
 		respond.HTTPError(w, http.StatusBadRequest, err)
 		return
@@ -44,7 +45,7 @@ func (h *Handler) HandleUpdate(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	product, err := h.service.UpdateByID(id, entity.Product{
+	product, err := h.service.UpdateByID(context.Background(), id, entity.Product{
 		Name:          reqBody.Name,
 		StockQuantity: reqBody.StockQuantity,
 	})

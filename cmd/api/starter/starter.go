@@ -12,6 +12,7 @@ import (
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
 	"github.com/lucasvmiguel/stock-api/pkg/http/server"
 	"github.com/lucasvmiguel/stock-api/pkg/logger"
+	"github.com/lucasvmiguel/stock-api/pkg/transactor"
 )
 
 // Starter is the struct that holds all dependencies
@@ -72,8 +73,13 @@ func (s *Starter) Start() {
 		logger.Fatal("failed to create repositories", err)
 	}
 
+	transactor := transactor.New(gormDB)
+
 	// creates services
-	services, err := s.createServices(createServicesArgs{repositories: repositories})
+	services, err := s.createServices(createServicesArgs{
+		Repositories: repositories,
+		Transactor:   transactor,
+	})
 	if err != nil {
 		logger.Fatal("failed to create services", err)
 	}

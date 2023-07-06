@@ -24,7 +24,7 @@ func TestHandleGetAll(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetAll().
+		GetAll(gomock.Any()).
 		Return(products, nil)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
@@ -58,7 +58,7 @@ func TestHandleGetAllDBFailed(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		GetAll().
+		GetAll(gomock.Any()).
 		Return(nil, errors.New(""))
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})

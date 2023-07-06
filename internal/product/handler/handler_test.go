@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	nonexistentID = uint(0)
+	nonexistentID = 0
 	fakeTime      = time.Date(1, 1, 1, 1, 1, 1, 1, time.UTC)
 
 	fakeProduct = &entity.Product{

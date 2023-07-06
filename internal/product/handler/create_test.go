@@ -24,7 +24,7 @@ func TestHandleCreate(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
+		Create(gomock.Any(), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
@@ -63,11 +63,6 @@ func TestHandleCreateInvalidBody(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	service.
-		EXPECT().
-		Create(nil).
-		Return(nil, nil).
-		Times(0)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
@@ -92,7 +87,7 @@ func TestHandleCreateDBFailed(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
+		Create(gomock.Any(), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).

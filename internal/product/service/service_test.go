@@ -25,16 +25,20 @@ var (
 
 func TestNewService(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
 	repository := NewMockRepository(ctrl)
 
-	_, err := NewService(repository)
+	_, err := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 	if err != nil {
 		t.Error("should not return error when repository is not nil")
 	}
 }
 
 func TestNewServiceError(t *testing.T) {
-	_, err := NewService(nil)
+	_, err := NewService(NewServiceArgs{})
 	if err == nil {
 		t.Error("error should be returned when no repository is passed")
 	}

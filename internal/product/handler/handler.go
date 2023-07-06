@@ -2,6 +2,7 @@
 package handler
 
 import (
+	"context"
 	"errors"
 
 	"github.com/lucasvmiguel/stock-api/internal/product/entity"
@@ -31,12 +32,12 @@ type GenericTypePaginationResult = *pagination.Result[*entity.Product]
 
 // service interface to run different features
 type Service interface {
-	Create(product entity.Product) (*entity.Product, error)
-	GetAll() ([]*entity.Product, error)
-	GetByID(id uint) (*entity.Product, error)
-	GetPaginated(cursor uint, limit uint) (GenericTypePaginationResult, error)
-	UpdateByID(id uint, product entity.Product) (*entity.Product, error)
-	DeleteByID(id uint) (*entity.Product, error)
+	Create(ctx context.Context, product entity.Product) (*entity.Product, error)
+	GetAll(ctx context.Context) ([]*entity.Product, error)
+	GetByID(ctx context.Context, id int) (*entity.Product, error)
+	GetPaginated(ctx context.Context, cursor int, limit int) (GenericTypePaginationResult, error)
+	UpdateByID(ctx context.Context, id int, product entity.Product) (*entity.Product, error)
+	DeleteByID(ctx context.Context, id int) (*entity.Product, error)
 }
 
 // product handler that has methods to handle different types of http requests

@@ -33,7 +33,7 @@ func Serve(port string, router *chi.Mux) {
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logger.Fatal("listen", err)
+			logger.Error("failed to start the http server", err)
 		}
 	}()
 
@@ -47,7 +47,7 @@ func Serve(port string, router *chi.Mux) {
 	defer func() { cancel() }()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		logger.Fatal("HTTP server shutdown failed", err)
+		logger.Error("HTTP server shutdown failed", err)
 	}
 	logger.Info("HTTP server exited properly")
 }

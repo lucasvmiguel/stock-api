@@ -2,6 +2,7 @@ package starter
 
 import (
 	productService "github.com/lucasvmiguel/stock-api/internal/product/service"
+	"github.com/lucasvmiguel/stock-api/pkg/transactor"
 )
 
 // services is a struct that holds all services
@@ -11,12 +12,16 @@ type services struct {
 
 // createServicesArgs is the arguments struct for createServices function
 type createServicesArgs struct {
-	repositories repositories
+	Repositories repositories
+	Transactor   *transactor.Transactor
 }
 
 // createServices creates all services
 func (s *Starter) createServices(args createServicesArgs) (services, error) {
-	productSvc, err := productService.NewService(args.repositories.product)
+	productSvc, err := productService.NewService(productService.NewServiceArgs{
+		Repository: args.Repositories.product,
+		Transactor: args.Transactor,
+	})
 	if err != nil {
 		return services{}, err
 	}

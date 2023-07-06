@@ -10,7 +10,7 @@ import (
 
 // product entity
 type Product struct {
-	ID            uint `gorm:"primaryKey"`
+	ID            int `gorm:"primaryKey"`
 	Name          string
 	Code          uuid.UUID `gorm:"uniqueIndex"`
 	StockQuantity int       `gorm:"default:0"`

@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
@@ -8,9 +10,9 @@ import (
 )
 
 // gets all products from the database
-func (r *Repository) GetAll() ([]*entity.Product, error) {
+func (r *Repository) GetAll(ctx context.Context) ([]*entity.Product, error) {
 	products := []*entity.Product{}
-	result := r.dbClient.Find(&products)
+	result := r.run(ctx).Order(idColumnName).Find(&products)
 	if result.Error != nil {
 		return nil, errors.Wrap(result.Error, "failed to get all products")
 	}
@@ -19,9 +21,9 @@ func (r *Repository) GetAll() ([]*entity.Product, error) {
 }
 
 // gets a product by id from the database
-func (r *Repository) GetByID(id uint) (*entity.Product, error) {
+func (r *Repository) GetByID(ctx context.Context, id int) (*entity.Product, error) {
 	product := &entity.Product{}
-	result := r.dbClient.First(&product, id)
+	result := r.run(ctx).First(&product, id)
 	if result.Error == gorm.ErrRecordNotFound {
 		return nil, nil
 	}
@@ -35,9 +37,9 @@ func (r *Repository) GetByID(id uint) (*entity.Product, error) {
 
 // gets products paginated from the database
 // cursor is the last id from the previous page
-func (r *Repository) GetPaginated(cursor uint, limit uint) ([]*entity.Product, error) {
+func (r *Repository) GetPaginated(ctx context.Context, cursor int, limit int) ([]*entity.Product, error) {
 	products := []*entity.Product{}
-	result := r.dbClient.Where("id > ?", int(cursor)).Limit(int(limit)).Find(&products)
+	result := r.run(ctx).Where("id > ?", int(cursor)).Limit(int(limit)).Order(idColumnName).Find(&products)
 	if result.Error != nil {
 		return nil, errors.Wrap(result.Error, "failed to get products paginated")
 	}

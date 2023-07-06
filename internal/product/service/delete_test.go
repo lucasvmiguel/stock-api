@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -9,15 +10,21 @@ import (
 
 func TestDeleteByID_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Commit(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		DeleteByID(gomock.Eq(fakeProduct.ID)).
+		DeleteByID(gomock.Any(), gomock.Eq(fakeProduct.ID)).
 		Return(fakeProduct, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.DeleteByID(fakeProduct.ID)
+	p, err := s.DeleteByID(context.Background(), fakeProduct.ID)
 	if err != nil {
 		t.Errorf("error should be nil, instead it got: %v", err)
 	}
@@ -29,15 +36,21 @@ func TestDeleteByID_Successfully(t *testing.T) {
 
 func TestDeleteByID_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Rollback(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		DeleteByID(gomock.Eq(fakeProduct.ID)).
+		DeleteByID(gomock.Any(), gomock.Eq(fakeProduct.ID)).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.DeleteByID(fakeProduct.ID)
+	p, err := s.DeleteByID(context.Background(), fakeProduct.ID)
 	if err == nil {
 		t.Error("error should not be nil")
 	}

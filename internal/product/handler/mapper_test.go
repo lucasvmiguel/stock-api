@@ -22,7 +22,7 @@ func TestMapProductsToResponseBody(t *testing.T) {
 }
 
 func TestMapProductsToPaginatedResponseBody(t *testing.T) {
-	fakeNextCursor := uint(10)
+	fakeNextCursor := 10
 
 	result := &pagination.Result[*entity.Product]{
 		NextCursor: &fakeNextCursor,

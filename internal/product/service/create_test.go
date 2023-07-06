@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -11,18 +12,24 @@ import (
 
 func TestCreate_Successfully(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Commit(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
+		Create(gomock.Any(), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
 		Return(fakeProduct, nil)
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.Create(entity.Product{
+	p, err := s.Create(context.Background(), entity.Product{
 		Name:          fakeProduct.Name,
 		StockQuantity: fakeProduct.StockQuantity,
 	})
@@ -37,18 +44,24 @@ func TestCreate_Successfully(t *testing.T) {
 
 func TestCreate_RepositoryWithError(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	transactor := NewMockTransactor(ctrl)
+	transactor.EXPECT().Begin(gomock.Any()).Return(context.Background())
+	transactor.EXPECT().Rollback(gomock.Any())
 	repository := NewMockRepository(ctrl)
 	repository.
 		EXPECT().
-		Create(gomock.Eq(entity.Product{
+		Create(gomock.Any(), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
 		Return(nil, errors.New(""))
 
-	h, _ := NewService(repository)
+	s, _ := NewService(NewServiceArgs{
+		Repository: repository,
+		Transactor: transactor,
+	})
 
-	p, err := h.Create(entity.Product{
+	p, err := s.Create(context.Background(), entity.Product{
 		Name:          fakeProduct.Name,
 		StockQuantity: fakeProduct.StockQuantity,
 	})

@@ -4,10 +4,10 @@ API_IMAGE:=stock-api
 VERSION:=latest
 LOCAL_URL:=http://localhost:$(PORT)
 
-test-unit: generate-mocks
+test-unit: install generate-mocks
 	ENV=TEST go test -cover $(shell go list ./... | grep -v test)
 
-test-integration:
+test-integration: install
 	go clean -cache
 	ENV=TEST go test -cover $(shell go list ./... | grep test)
 
@@ -18,17 +18,18 @@ test-stress:
 	@sleep 10
 	@echo "Stress tests finished! Check the reports in test/stress folder."
 
-run:
+install:
+	go mod tidy
+	go get github.com/golang/mock/mockgen@v1.6.0
+
+run-api: install
 	go run cmd/api/main.go
 
-build:
+build: install
 	go build cmd/api/main.go
 
 docker-build:
 	docker build -t $(REGISTRY)/$(API_IMAGE):$(VERSION) -f cmd/api/Dockerfile .
-
-docker-run:
-	docker run --rm -p $(PORT):$(PORT) $(REGISTRY)/$(API_IMAGE):$(VERSION)
 
 persistence-up:
 	docker-compose up

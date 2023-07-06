@@ -14,6 +14,11 @@ func Fatal(message string, err error) {
 	log.Fatal().Err(err).Msg(message)
 }
 
+// Error logs an errror message
+func Error(message string, err error) {
+	log.Error().Err(err).Msg(message)
+}
+
 // Infof logs a message with arguments
 func Infof(message string, args ...interface{}) {
 	log.Info().Msgf(message, args...)

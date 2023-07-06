@@ -2,13 +2,20 @@
 package repository
 
 import (
+	"context"
+
+	"github.com/lucasvmiguel/stock-api/pkg/transactor"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
+const (
+	idColumnName = "id"
+)
+
 // product repository
 type Repository struct {
-	dbClient *gorm.DB
+	db *gorm.DB
 }
 
 var (
@@ -17,10 +24,20 @@ var (
 )
 
 // creates a new product repository
-func NewRepository(dbClient *gorm.DB) (*Repository, error) {
-	if dbClient == nil {
+func NewRepository(db *gorm.DB) (*Repository, error) {
+	if db == nil {
 		return nil, ErrNilDBClient
 	}
 
-	return &Repository{dbClient}, nil
+	return &Repository{db}, nil
+}
+
+func (r *Repository) run(ctx context.Context) *gorm.DB {
+	transaction := transactor.DBTransaction(ctx)
+
+	if transaction != nil {
+		return transaction
+	}
+
+	return r.db
 }

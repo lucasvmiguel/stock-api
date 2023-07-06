@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/lucasvmiguel/stock-api/pkg/http/respond"
@@ -11,7 +12,7 @@ import (
 func (h *Handler) HandleGetAll(w http.ResponseWriter, req *http.Request) {
 	logger := logger.HTTPLogEntry(req)
 
-	products, err := h.service.GetAll()
+	products, err := h.service.GetAll(context.Background())
 	if err != nil {
 		logger.Err(err).Msg(ErrInternalServerError.Error())
 		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)

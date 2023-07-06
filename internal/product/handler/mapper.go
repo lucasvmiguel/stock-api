@@ -11,7 +11,7 @@ import (
 
 // productResponseBody is the response body for a product
 type productResponseBody struct {
-	ID            uint      `json:"id"`
+	ID            int       `json:"id"`
 	Name          string    `json:"name"`
 	Code          uuid.UUID `json:"code"`
 	StockQuantity int       `json:"stock_quantity"`
@@ -25,7 +25,7 @@ type productsResponseBody []productResponseBody
 // paginatedProductsResponseBody is the response body for a paginated list of products
 type paginatedProductsResponseBody struct {
 	Items      []productResponseBody `json:"items"`
-	NextCursor *uint                 `json:"next_cursor"`
+	NextCursor *int                  `json:"next_cursor"`
 }
 
 // maps a product entity to a product response body

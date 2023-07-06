@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 
@@ -8,14 +10,14 @@ import (
 )
 
 // deletes a product by id from the database
-func (r *Repository) DeleteByID(id uint) (*entity.Product, error) {
+func (r *Repository) DeleteByID(ctx context.Context, id int) (*entity.Product, error) {
 	product := &entity.Product{}
-	result := r.dbClient.First(product, id)
+	result := r.run(ctx).First(product, id)
 	if result.Error == gorm.ErrRecordNotFound {
 		return nil, nil
 	}
 
-	result = r.dbClient.Delete(product, id)
+	result = r.run(ctx).Delete(product, id)
 	if result.Error != nil {
 		return nil, errors.Wrap(result.Error, "failed to delete product by id")
 	}

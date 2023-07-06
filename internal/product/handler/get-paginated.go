@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 
@@ -31,7 +32,7 @@ func (h *Handler) HandleGetPaginated(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	result, err := h.service.GetPaginated(uint(paginatedQueryParams.Cursor), uint(paginatedQueryParams.Limit))
+	result, err := h.service.GetPaginated(context.Background(), paginatedQueryParams.Cursor, paginatedQueryParams.Limit)
 	if err != nil {
 		logger.Err(err).Msg(ErrInternalServerError.Error())
 		respond.HTTPError(w, http.StatusInternalServerError, ErrInternalServerError)

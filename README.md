@@ -8,13 +8,23 @@ A Stock API is a REST API written in Go where products can be created, read, upd
 
 Note: _This API has been configured for `development` environment. To use in a `production` environment, further setup will be required._
 
-## Running the app
+## Installing the app
 
 **Requirements:**
 
-- [Golang](https://go.dev/)
+- [Go](https://go.dev/) (>= 1.20)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+
+To install the go modules required to run the application, run the following command:
+
+```bash
+git clone git@github.com:lucasvmiguel/stock-api.git
+cd stock-api
+make install
+```
+
+## Running the app
 
 1. Open a terminal and run the following command to start the persistence (database) required:
 
@@ -98,14 +108,14 @@ The following list shows all user requirements implemented by the system.
 
 The following picture shows all the entities of the system.
 
-![schema](/docs/schema.png)
+![schema](/assets/schema.png)
 
 ### System Design
 
 The following pictures shows some of the details of how the system is designed and implemented.
 
-![system design](/docs/system-design.png)
-![layers](/docs/layer.png)
+![system design](/assets/system-design.png)
+![layers](/assets/layer.png)
 
 ### Folder/File structure
 
@@ -130,10 +140,11 @@ Note: _inspired by https://github.com/golang-standards/project-layout_
 - Database ORM: [GORM](https://gorm.io/)
 - Config reader: [godotenv](https://github.com/joho/godotenv)
 - Database: [Postgres](https://www.postgresql.org/)
+- Message Queue: [Asynq](https://github.com/hibiken/asynq)
 
 ## API Docs
 
-This section is described the REST API's endpoints (URL, request, response, etc).
+In this section is described the REST API's endpoints (URL, request, response, etc).
 
 <details>
 <summary>Create product</summary>
@@ -227,6 +238,12 @@ Body:
     ],
     "next_cursor": 2
   }
+```
+
+**Bad Request**
+
+```
+Status: 400
 ```
 
 **Internal Server Error**

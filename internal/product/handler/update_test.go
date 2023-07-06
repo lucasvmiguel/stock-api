@@ -26,7 +26,7 @@ func TestHandleUpdate(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+		UpdateByID(gomock.Any(), gomock.Eq(1), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
@@ -69,11 +69,6 @@ func TestHandleUpdateInvalidBody(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	service := NewMockService(ctrl)
-	service.
-		EXPECT().
-		UpdateByID(nil, nil).
-		Return(nil, nil).
-		Times(0)
 
 	h, _ := NewHandler(NewHandlerArgs{Service: service})
 
@@ -102,7 +97,7 @@ func TestHandleUpdateDBFailed(t *testing.T) {
 	service := NewMockService(ctrl)
 	service.
 		EXPECT().
-		UpdateByID(gomock.Eq(uint(1)), gomock.Eq(entity.Product{
+		UpdateByID(gomock.Any(), gomock.Eq(1), gomock.Eq(entity.Product{
 			Name:          fakeProduct.Name,
 			StockQuantity: fakeProduct.StockQuantity,
 		})).
