@@ -1,3 +1,5 @@
+// package for creating either a producer or a consumer for a message queue.
+// reference: https://github.com/hibiken/asynq
 package mqueue
 
 import (
