@@ -40,3 +40,7 @@ persistence-down:
 generate-mocks:
 	go run github.com/golang/mock/mockgen -source=./internal/product/handler/handler.go -package=handler -destination=./internal/product/handler/handler_mocks.go
 	go run github.com/golang/mock/mockgen -source=./internal/product/service/service.go -package=service -destination=./internal/product/service/service_mocks.go
+
+generate_tls_files:
+	openssl genrsa -out server.key 2048
+	openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650

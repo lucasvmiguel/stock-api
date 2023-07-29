@@ -95,5 +95,8 @@ func (s *Starter) Start() {
 	s.createRoutes(createRoutesArgs{router: router, handlers: handlers})
 
 	// start http server
-	server.Serve(s.config.Port, router)
+	server.Serve(s.config.Port, router, server.ServeOpts{
+		TLSCertificatePath: s.config.TLSCertificateFilePath,
+		TLSPrivateKeyPath:  s.config.TLSPrivateKeyFilePath,
+	})
 }

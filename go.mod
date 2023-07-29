@@ -56,8 +56,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
-	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1
-	golang.org/x/mod v0.11.0 // indirect
+	golang.org/x/mod v0.9.0 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 	golang.org/x/tools v0.6.0 // indirect
 )

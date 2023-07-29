@@ -20,6 +20,8 @@ type config struct {
 	DBPassword             string
 	Port                   string
 	ServiceName            string
+	TLSCertificateFilePath string
+	TLSPrivateKeyFilePath  string
 	PaginationDefaultLimit int
 }
 
@@ -40,6 +42,8 @@ func loadConfig() (config, error) {
 		DBPassword:             os.Getenv("DB_PASSWORD"),
 		DBPort:                 os.Getenv("DB_PORT"),
 		ServiceName:            os.Getenv("SERVICE_NAME"),
+		TLSCertificateFilePath: os.Getenv("TLS_CERTIFICATE_FILE_PATH"),
+		TLSPrivateKeyFilePath:  os.Getenv("TLS_PRIVATE_KEY_FILE_PATH"),
 		PaginationDefaultLimit: paginationDefaultLimit,
 	}, nil
 }

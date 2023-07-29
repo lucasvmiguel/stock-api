@@ -18,9 +18,14 @@ const (
 	timeout = 10 * time.Second
 )
 
+type ServeOpts struct {
+	TLSCertificatePath string
+	TLSPrivateKeyPath  string
+}
+
 // Serve an HTTP server (with graceful shutdown)
 // Reference: https://medium.com/honestbee-tw-engineer/gracefully-shutdown-in-go-http-server-5f5e6b83da5a
-func Serve(port string, router *chi.Mux) {
+func Serve(port string, router *chi.Mux, opts ServeOpts) {
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("0.0.0.0:%s", port),
 		Handler:      router,
@@ -32,7 +37,15 @@ func Serve(port string, router *chi.Mux) {
 	signal.Notify(done, os.Interrupt, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		var err error
+
+		if opts.TLSCertificatePath != "" && opts.TLSPrivateKeyPath != "" {
+			err = srv.ListenAndServeTLS(opts.TLSCertificatePath, opts.TLSPrivateKeyPath)
+		} else {
+			err = srv.ListenAndServe()
+		}
+
+		if err != nil && err != http.ErrServerClosed {
 			logger.Error("failed to start the http server", err)
 		}
 	}()
